@@ -3,8 +3,34 @@
   "description": "Fabrication portfolio of Dante Cameron, New York: props, costumes, and installations from digital model to finished object.",
   "email": "dantexcameron@gmail.com",
   "copyright_year": "2026",
+  "sections": [
+    {
+      "dir": "projects",
+      "path": "",
+      "title": "Fabrication",
+      "headline": "Props, costumes, and installations, from digital model to finished object.",
+      "intro": "I design in Maya and ZBrush and build in the shop: 3D printing, vacuum forming, molding, foam, paint, and the electronics that make a piece move or glow.",
+      "where": "New York · Available for fabrication work"
+    }
+  ],
   "links": [
-    {"label": "Tech art", "href": "https://dantecameron.artstation.com/"},
-    {"label": "Email", "href": "#contact"}
+    {
+      "label": "ArtStation",
+      "href": "https://dantecameron.artstation.com/"
+    },
+    {
+      "label": "Email",
+      "href": "#contact"
+    }
+  ],
+  "parked_sections": [
+    {
+      "dir": "techart",
+      "path": "tech-art",
+      "title": "Tech art",
+      "headline": "Realtime, VR, and animation work.",
+      "intro": "Game and installation projects in Unreal Engine, Unity, and Maya from the SCAD Immersive Reality program, with my part of each one called out on its page. Studio work from Agile Lens is on ArtStation.",
+      "where": "2020 to 2022 · SCAD Immersive Reality"
+    }
   ]
 }

@@ -7,6 +7,8 @@ role: Design, printing, and documentation
 materials: FDM prints
 tools: Maya, FDM printing
 cover: 01.webp
+summary: An articulated Wasp from ARC Raiders, designed and 3D printed, with the illustrated assembly guide I wrote so anyone can print and build it.
+size: half
 order: 5
 ---
 

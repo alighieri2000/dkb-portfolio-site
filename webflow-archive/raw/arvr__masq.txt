@@ -1,0 +1,10 @@
+Masq
+MASQ is a mobile program used to preview facemasks using augmented reality.
+This interactive program runs on the Unity Engine, integrated with Vuforia. Vuforia also hosts the image targets used for AR motion tracking. The UI and models are custom assets made to visualize this app concept.
+AR for a Purpose
+MASQ was ideated in 2020, in the midst of the pandemic. The purpose of this project is to provide a simple visualization tool for facemask information.
+This app serves to connect users to a consolidated source to help decide which mask is right for them. The AR feature projects the featured masks directly onto the user's face in real-time, providing an interactive live preview of their safety options.
+Art and Design
+MASQ's design profile is both simplistic and efficient. With small, abstract meshes, the engine demands of real-time augmented reality are met.
+This program combines 3D projection with 2D user interface. As the image follows the user, they are able to switch materials and shapes live without losing tracking or clarity.
+© 2023 by Dante Cameron.

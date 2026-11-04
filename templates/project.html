@@ -14,19 +14,22 @@
 <body class="project">
 <header class="top">
   <a class="brand" href="{{root}}">{{site_name}}</a>
-  <nav><a href="{{root}}">All work</a>{{nav}}</nav>
+  <nav>{{nav}}</nav>
 </header>
 <main>
-  <section class="hero">{{hero}}</section>
-  <section class="intro">
-    {{draft_note}}
-    <h1>{{title}}</h1>
-    <p class="sub">{{subtitle}}</p>
-    <dl class="spec">{{spec}}</dl>
-  </section>
-  <article class="body">
+  <div class="sheet-layout">
+    <article class="gallery">
 {{body}}
-  </article>
+    </article>
+    <aside class="side">
+      {{draft_note}}
+      <h1>{{title}}</h1>
+      <p class="sub">{{subtitle}}</p>
+      <dl class="spec">{{spec}}</dl>
+      <div class="summary">{{summary}}</div>
+      {{links}}
+    </aside>
+  </div>
   <nav class="pn">{{prevnext}}</nav>
 </main>
 <footer class="foot" id="contact">

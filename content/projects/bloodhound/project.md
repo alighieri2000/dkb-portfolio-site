@@ -7,6 +7,7 @@ role: Design, patterning, and fabrication
 materials: FDM prints, EVA foam, sewn garments, micro LEDs
 tools: Maya, ZBrush, FDM printing, airbrush
 cover: 01.webp
+summary: Bloodhound's Whistling Winter skin from Apex Legends, modeled from leaked footage before the skin shipped and built from printed parts, EVA foam, sewn garments, and micro LEDs.
 order: 3
 ---
 

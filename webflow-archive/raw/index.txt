@@ -1,0 +1,95 @@
+Dante Cameron - Immersive Reality Portfolio
+projects skills bio resume contact
+Dante Cameron
+"there are established ways of working, but there aren't any rules."
+-Felix Colgrave
+Bio
+I am an artist and designer creating communicative media within the world of emergent technology. My personal goal is master the art of "medium as the message." On my path to self growth, I learned and adopted the best creative techniques accessible so as to always have the right tool for any job. Now, with my recent degree in Immersive Reality, I seek to utilize modern creative tools to their maximum potential.
+With an understanding of the 3D pipeline, I've gained the tools to prototype a concept at any stage, from ideation to a playable VR demo, all to ensure that the ideas I want to communicate are done so efficiently and clearly.
+Capabilities
+I thrive in a team setting, both as a leader and member.  In order to work within a team setting, collaborating needs to be productive and efficient at every stage. From flowcharts to slide-decks, the software to facilitate this is expansive and constantly growing. The tools for operating in a collaborative setting go beyond artistic software, however, as being able to effectively and efficiently communicate is vital to the success of a project.
+To stay adaptable, I try to learn as much as I can about a given software every time I'm given the opportunity to use it. When it's time to learn a new workflow, I draw from my breadth of knowledge to learn as much as I can on my own, identify the most critical gaps, and seek out the assistance I need. By developing a broad awareness of the pipeline, I am able to more effectively communicate my needs, ideas, and feedback to my team.
+Below are a few tools in my workflow that facilitate that communication.
+Google
+Suite
+Adobe
+Suite
+Keynote
+Miro
+Office
+Suite
+3d design skills and software
+modeling
+• hard surface modeling
+• sculpting
+• projecting onto low-poly
+• UV unwrapping
+• texture painting
+• implementing textures
+• retopologizing
+• asset revision
+• utilizing asset libraries
+‍
+animation
+• motion graphics
+• character rigging
+• mechanical rigging
+• weight painting
+• editing motion curves
+• mocap data utilization
+• mocap cleanup
+• importing / exporting
+• real-time animation
+• blending
+• timing principles
+fabrication
+• laser cutting
+• arduino wiring
+• arduino programming
+• woodworking
+• 3D printing
+‍
+Maya
+Unreal Engine
+Quixel
+Unity
+Substance
+Zbrush
+Medium
+Arduino
+Prototyping
+Whether it be a quick animation, life-sized mockup, or VR experience, I have dedicated myself to understanding how to display my ideas in a presentable, functional form.
+By combining sketching, animation, and the 3D pipeline, I can ideate virtual spaces and interactions to explore experiential designs. Furthermore, by using VR as a pre-production tool, I am able to ideate 3D spaces even faster. Throughout my ARVR degree I often prototyped even the simplest of concepts in VR. With an efficient pipeline, I am able to quickly mockup any interaction I could need, and gain real insight on its viability.
+Project Gallery
+To view the gallery of project websites, be sure to visit this site on a computer or ipad. Each project in the gallery has its own site which you can explore by clicking any of the icons below. Within you can find documentation, factsheets, and the links to download Stroke of Magic and Tridentia for free.
+Stroke of Magic
+Painting-based Puzzle Game for Oculus Quest
+Tridentia
+Asymmetrical PVP
+VR Game
+Diffuse: AR
+VR Game with Custom
+Arduino Controller
+Synesthesia
+Immersive Animation set to a Live Orchestra
+Sleep Paralysis
+Immersive Sleep Paralysis Narrative
+MASQ
+Unity AR Facemask Filter Application
+Luminance
+Real-Time Environment Utilizing an XR Stage
+Ruka
+2.5D Physics Platformer with a Unique Premise
+XR Health: NALU
+Passive Experience Built for Hospice Patients
+Magic Lantern VR
+Phantasmagoria Simulation
+Wakey Wakey
+Shapes-to-Music Motion Media Piece
+Digital Character
+Sculpted and Painted 3D Character
+2d Concept Art
+click image below to view the full gallery
+Contact
+Send me a message!
+© 2023 by Dante Cameron.

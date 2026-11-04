@@ -1,0 +1,18 @@
+HTTP/1.1 301 Moved Permanently
+Content-Length: 63
+Content-Type: text/html; charset=utf-8
+Date: Wed, 04 Nov 2026 20:06:28 GMT
+Location: http://www.dantexcameron.com
+Server: ip-10-123-124-10.ec2.internal
+Vary: Accept-Encoding
+X-Request-Id: 4fe042b3-7506-407a-9da4-c4c2a6016fd2
+Connection: close
+
+HTTP/1.1 301 Moved Permanently
+Server: nginx
+Date: Wed, 04 Nov 2026 20:06:28 GMT
+Content-Type: text/html
+Content-Length: 162
+Connection: keep-alive
+Location: https://www.dantexcameron.com/
+

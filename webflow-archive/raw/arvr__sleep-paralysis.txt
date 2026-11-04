@@ -1,0 +1,27 @@
+Sleep Paralysis
+DESCRIPTION
+Experience the phenomenon of sleep paralysis (safely!) in virtual reality using any headset.
+This immersive video simulates a terrifying late-night encounter with a sleep paralysis demon. As the experience plays, the visitor gets closer and closer as the intensity of your heartbeat grows.
+DISCLAMER: This horror experience may be uncomfortable for some. Viewer discretion advised.
+PROCESS
+The background footage for this experience was shot on a Samsung Gear 360. After Effects is used to composite immersive animations over the
+equi-rectangular 360 footage.
+The sleep paralysis demon is hand-rotoscoped in AE. The experience was then rendered as a 360 video, compatible with video players and VR headsets alike.
+Samsung
+Gear 360
+NARRATIVE
+Sleep Paralysis VR is based on the true account of the suffering from sleep paralysis. Past experiences of the condition is represented using animations made in After Effects.
+The illusion-breaking moment at the end of the experience also reflects that of personal account, as the sounds of their household would often break them out of their paralysis.
+USE MOUSE TO EXPLORE ENVIRONMENT
+FACTSHEET
+Developer
+Dante Cameron
+Platform
+Youtube, Oculus, Google Cardboard,
+Any form of VR 360 video player.
+Info
+Solo Project, SCAD 2019
+rb.gy/u21qwm
+Experience Sleep Paralysis VR for yourself!
+Simply type this URL into your phone or VR headset to load the video. This is compatible with any VR device that can access YouTube, including Google Cardboard.
+© 2023 by Dante Cameron.

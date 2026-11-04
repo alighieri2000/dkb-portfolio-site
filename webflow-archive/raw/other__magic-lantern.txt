@@ -1,0 +1,19 @@
+Magic Lantern
+MAGIC LANTERN
+DESCRIPTION
+Experience the power of the wizards of the phantasmagoria! Magic Lantern is a short VR experiences that puts Kircher's Magic Lantern within your grasp
+Built with Unreal Engine, this experience is a pick-up-and-play virtual toybox featuring the titular ghost-revealing lantern. Passing the lantern over the crowd reveals the other world hidden in the gallery. Haunting figures dance between the crowd, increasing the audience's fear level in real time.
+FACTSHEET
+Developer
+Dante Cameron
+Platform
+PC VR, Oculus Rift, Vive, Index
+Info
+Solo Project, SCAD 2022
+DOCUMENTATION
+HISTORY
+This project is based on the 17th century phenomenon of the Phantasmagoria. Specifically, Kircher's invention of the Magic Lantern. Really just a precursor to the projector, the Magic Lantern was eventually used in performative 'revelations' of the spirit world and its connection to Earth. Traveling performers called Wizards would flood the audience with sensory input, like smoke and low-frequency music, convincing them that the demons brought from the séance were truly other-worldly.
+This project presents the Lantern's claims as though they were true, giving the player the true experience of one of these 17th century 'Wizards' using Virtual Reality.
+ANIMATIONS
+Because the original invention of the Magic Lantern projected the demons onto a flat surface, the animations of the demons are similarly two-dimensional. The hand-drawn textures, once assigned a mesh and skeleton, were animated to dance and flow across the screen as they get revealed.
+© 2023 by Dante Cameron.

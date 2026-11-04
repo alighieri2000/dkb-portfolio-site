@@ -4,10 +4,13 @@ A fabrication portfolio: a page of full-screen covers, one per project, each ope
 
 ## How it is organized
 
+The live site is the fabrication gallery at the root (`content/projects/`). A tech-art gallery (`content/techart/`, rebuilt from the old Webflow pages) is parked: its section definition sits under `parked_sections` in `content/site.json`, and moving it into `sections` publishes it at `/tech-art/` with its own headline and intro. The same mechanism adds any further gallery.
+
 ```
 content/
-  site.json                 your name, email, nav links
+  site.json                 your name, email, the sections, nav links
   CNAME                     the domain the site is served at
+  techart/                  the tech-art gallery (same layout as below)
   projects/
     remmick/
       project.md            the write-up (see below)
@@ -18,7 +21,11 @@ build.py                    turns content/ into site/
 preview.bat                 double-click to build and open a local preview
 ```
 
-## Add or edit a project
+## The easy way: the studio
+
+Double-click `studio.bat`. A page opens at `http://localhost:8001/` listing every project. From there you can create a project, upload a cover, a hover clip and images, pick which file is the cover and which is the hover clip, fill in the spec sheet and the write-up, build and preview the site, and publish to GitHub with one button. It only edits the files described below, so you can always fall back to editing them by hand.
+
+## Add or edit a project by hand
 
 1. Make a folder under `content/projects/`. The folder name becomes the page address (`remmick` becomes `dantexcameron.com/remmick/`), so use lowercase and hyphens.
 2. Drop in `cover.jpg` (at least 2400 px wide; it fills the whole screen) and your images.
@@ -49,7 +56,11 @@ More text. Two images side by side:
 - A list
 ```
 
-   `order` sets the position on the home page (1 is the top). Any label you leave out is simply not shown. `draft: true` keeps a project off the published site while you work on it; previews still show it.
+   `size: half` makes the project a square that shares a row with the next half-size project; leave it out for a full-width rectangle. `order` sets the position on the home page (1 is the top). Any label you leave out is simply not shown. `draft: true` keeps a project off the published site while you work on it; previews still show it. Other optional lines: `summary:` (the paragraph in the side panel), `links:` (`Label | https://url ; Label | https://url`, shown as buttons), `cover: 03.jpg` and `hover: clip.mp4` to use files not named cover/hover, and `timeline:`.
+
+   A line containing only `@youtube VIDEOID` embeds that YouTube video. Tech-art pages also use `developer:`, `platform:`, `context:` and `awards:` in the spec sheet.
+
+   On the project page the images and write-up scroll on the left while the title, spec sheet and summary stay pinned on the right. Text in the write-up appears between the images, so use it for short process notes; the longer description belongs in `summary`.
 
 4. Preview: double-click `preview.bat`. It builds the site and opens it in your browser. Close the window when you are done.
 5. Publish: commit and push the change (GitHub Desktop: write a summary, click Commit, click Push). GitHub rebuilds the site in about a minute. You can also edit `project.md` or upload images straight on github.com in the browser; every saved change publishes the same way.

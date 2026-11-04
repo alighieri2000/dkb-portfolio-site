@@ -1,0 +1,9 @@
+Synesthesia
+Description
+Synesthesia is a unique immersive dance of sound and color.
+The experience consists of a 360 video animated in VR and composited using 3D software. As the music swells, the visuals grow and undulate. Standing within the world of Synesthesia surrounds the viewer with color and sound, visualizing the beautiful music into a stunning sensory performance.
+The dancing shapes were animated by hand in Quill; a VR animation tool. The ribbons move across the screen, overlaid onto the 360 footage of the New Zealand Symphony Orchestra. Each journey of each ribbon represents a real-world hand motion, captured using VR controllers and repeated to create mesmerizing patterns.
+rb.gy/9w5ued
+Experience Synesthesia for yourself!
+Simply type this URL into your phone or VR headset to load the video. This is compatible with any VR device that can access YouTube, including Google Cardboard.
+© 2023 by Dante Cameron.

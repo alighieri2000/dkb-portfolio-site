@@ -7,6 +7,8 @@ role: Modeling, rigging, printing, and finishing
 materials: FDM prints, paint
 tools: Maya, ZBrush, custom pose rig, FDM printing
 cover: 01.webp
+summary: Guido Mista's Stand from JoJo's Bizarre Adventure as durable, posable convention props: modeled, rigged for posing, printed with strength in mind, and painted to match the manga.
+size: half
 order: 4
 ---
 

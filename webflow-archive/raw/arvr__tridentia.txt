@@ -1,0 +1,38 @@
+Tridentia
+Try TRIDENTIA for free!
+Click Here to download the EXE.
+DESCRIPTION
+Create your own boss battle! Tridentia is a head-to-head PVP experience that puts you and a friend into a battle for the ages. Play as Poseidon and experience the power of the seas in VR, or play as the Heroine and pillage the ocean's treasures with a PC.
+FACTSHEET
+Developer
+DCMKS Games (Based in Savannah, GA)
+Release Date
+Summer 2021
+Platform
+PC, tethered Virtual Reality (Rift, Rift S, Vive, Index)
+Info
+Group Project, SCAD 2022
+HISTORY
+The concept for Tridentia was pitched in the spring of 2021. Dante's love of Asymmetrical VR provided the perfect opportunity to develop an experience of his own. The project underwent development until the end of the summer 2021.
+PRESS KIT
+SCAD Entelechy 2022
+Best Interactive VR
+First Place
+Best of Show
+At SCAD's Entelechy awards, the annual ceremony celebrating the
+accomplishments of the school of Digital Media,
+Tridentia was chosen to win Best Interactive VR.
+After a showcase at which all of the submitted projects
+were judged, Tridentia was chosen to win Best of Show.
+CONTRIBUTIONS
+PROJECT PRODUCER
+Dante led the team in both stages of development. As producer, he was responsible for scoping the project, delegating tasks, organizing the team, and communicating between departments.
+DESIGN LEADERSHIP
+Because of the relative complexity that comes with developing an Asymmetrical VR game, the ideation for Tridentia is extensive. Dante designed the gameplay loop, and as such oversaw every checkpoint of the development pipeline in order to maintain the project's vision.
+CLICK PLAY BELOW TO SEE AN IN-DEPTH GAMEPLAY OVERVIEW
+ANIMATIONS
+With two characters of vastly different sizes, there was a wealth of animation necessary to create the world. The Hero and the god's traps react to one another, changing the world to give Poseidon a hint of her hiding place.
+The hero has several abilities, all of which were animated in Maya and imported into Unreal Engine.
+ASYMMETRICAL GAMEPLAY
+Designing gameplay interactions between a tethered VR headset and a third-person PC character is an extreme challenge. In order to up the intensity of the PVP, some choices (like giving neither player a way to directly attack one another) allow for emergent, exciting gameplay.
+© 2023 by Dante Cameron.

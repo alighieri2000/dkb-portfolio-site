@@ -1,0 +1,23 @@
+Ruka
+DESCRIPTION
+Ruka is a unique physics-based 2.5D platformer developed in Unreal Engine.
+This solo project was built from a concept involving an unlikely duo; a girl and an octopus. In Ruka, the player controls a girl born without the use of arms, swinging through a cliffside beach  with the help of a friend. A mouse and keyboard are used to build momentum and soar across gaps. Seagulls are littered throughout the level, impeding your progress, and must be contended with on the road to the clifftop.
+FACTSHEET
+Developer
+Dante Cameron
+Platform
+PC
+Info
+Solo Project, SCAD 2022
+DOCUMENTATION
+DESIGN AND PROCESS
+This project's goal is to create an interactive experience that experiments with multi-character animation. The process started with ideation sketches to develop the style and shape of the main, playable character.
+Character concept art is conceived and designed with a specific animation specification in mind. The combination of two characters transitioning into jump and swing states presents a variety of unique challenges.
+RIG AND ANIMATION
+Ruka's tentacles and animation-based movement is a combination of real-time physics and baked skeletal animations. Animating both characters together creates a complex rig, able to combine different animations in order to switch to desired states.
+The characters were rigged, weight painted, and animated using Autodesk Maya.
+GAMEPLAY
+Ruka is a physics-based platformer that relies on precise mouse movements paired with timed jump prediction. With the linear design of the cliff face, gravity is the main obstacle a player will encounter. Progress can be made by moving upwards, and is lost by falling down. Reaching the summit will spell a victory for the player and their sheep!
+ENVIRONMENTAL HAZARD
+The seagulls of Ruka acts as the "enemy" of the game. Their presence is made known as each bird flies away in a flurry of feathers. Casting the grapple towards a seagull's perch will cancel the grapple and leave you plummeting downward.
+© 2023 by Dante Cameron.

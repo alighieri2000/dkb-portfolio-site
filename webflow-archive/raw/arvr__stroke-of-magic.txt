@@ -1,0 +1,41 @@
+Stroke of Magic
+DESCRIPTION
+Stroke of Magic is an immersive, painting-based puzzle game built for the Oculus Quest 2.
+This experience was created using Unreal Engine 4.27. The development pipeline for Stroke of Magic innovated in several key areas in order to meet the demanding requirements of mobile VR.
+As tech lead and design artist, Dante was responsible for designing and developing key VR interactions and puzzles. Dante also created animations, environmental interactions, and player-driven events to enrich the immersion of the world.
+HISTORY
+Stroke of Magic began development at the beginning of 2022 during a senior studio class.
+Once it was decided that this game would be built for quest, the pipeline underwent heavy consideration to be sure of the possibility of the game's scope. Building for mobile using Unreal Engine was a new experience for everyone in the team, but with careful planning and use of Agile methodology, the development process was able to remain smooth and steady.
+FACTSHEET
+Developer
+Flaming Deers (Based in Savannah, GA)
+Release Date
+Jun 16, 2022
+Platform
+Oculus Quest 2
+Info
+Group Project, SCAD 2022
+SCAD Entelechy 2022
+Best 3D Game - First Place
+At SCAD's Entelechy awards, the annual ceremony celebrating the
+accomplishments of the school of Digital Media,
+Stroke of Magic was chosen to win the title of Best 3D Game.
+DOWNLOAD FOR FREE
+Stroke of magic is free to download and play!
+Download and install SideQuest, then load the app onto any
+Quest 2 headset.
+CONTRIBUTIONS
+CONDUIT PAINTING
+The conduit is a type of magic that can be channeled by the paintbrush in A Stroke of Magic. Its functionality was developed and created by Dante during his role as Tech Lead.
+Dante developed the blueprints that made up the puzzles, created a dynamic and VR capable paint-trail particle, and programmed the interactions needed to complete the game's level sequence.
+Blueprints create an instance-able, reworkable parent for replication, complete with efficient and clean timeline animations
+PUZZLE AND LEVEL DESIGN
+Using the conduit as a base for puzzle design yielded unique challenges for players in VR. Animated puzzles such this mortar end passel incorporate a drawable surface as a part of the solution. These interactable elements are seen throughout the environment, promoting a unified, modular immersion for any user.
+VR INTERACTIVITY
+To maintain viewer immersion, environmental interactions and animations appear throughout each level. Several VR interactions were created and designed in order to give puzzles an extra element of fantasy as well as clarity. This includes the conduit puzzle's ability to have a detachable power source that must be retrieved and replaced before the line can be drawn again.
+ANIMATION
+Animations are implemented as gameplay elements, environmental interactions, and mechanical movements throughout the level. To meet the requirements of VR development, animation must be smooth and efficient. Timelines were heavily utilized to avoid instancing animation BPs, saving processing power. Combining environmental feedback with animation creates a rewarding puzzle solving experience.
+This project heavily utilized standard Immersive Reality pipeline workflows.
+The Agile methodology was employed for the entirety of Stroke of Magic, with development split into scrum Sprints.
+To ensure correct game engine communication throughout the team, Perforce was used as version control for the project.
+© 2023 by Dante Cameron.

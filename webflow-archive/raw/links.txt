@@ -1,0 +1,11 @@
+/arvr/diffuse-ar
+/arvr/luminence
+/arvr/masq
+/arvr/sleep-paralysis
+/arvr/stroke-of-magic
+/arvr/synesthesia
+/arvr/tridentia
+/other/digital-character
+/other/magic-lantern
+/other/ruka
+/other/wakey-wakey

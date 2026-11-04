@@ -1,0 +1,12 @@
+Luminence
+L U M I N A N C E
+DESCRIPTION
+Luminance is a filmed version of an Unreal Engine environment built for use on an XR Stage.
+This short film utilizes real-time rendering power of Unreal Engine alongside the projection capabilities of an LED Volume.
+XR STAGE
+SCAD's XR Stage is a massive LED wall used to project real-time environments into the background of scenes. The volume simulates the lighting and reflections of the game engine background to make footage more realistic.
+PROCESS
+Dante was delegated to the team working on the virtual background. This part of the team created the environment background and set up the file with the proper plugins in order to be viewable on the XR volume. Unreal Engine was used to set-dress and light the scene
+DEVELOPMENT
+Luminance was a collaboration between VSFX, Immersive Reality, and Film students. Regular meetings and communication was necessary to remain punctual and organized. The relative new-ness of the technology meant that checkpoints had to be vigorously and precisely met in order to ensure file compatibility and quality.
+© 2023 by Dante Cameron.

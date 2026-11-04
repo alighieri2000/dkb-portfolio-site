@@ -1,0 +1,180 @@
+{
+ "/": {
+  "file": "index.html",
+  "title": "Dante Cameron - Immersive Reality Portfolio",
+  "assets": [
+   "large.png",
+   "Oculus_Medium_logo.png",
+   "Substance_Logo.png",
+   "unity-logo-988A22E703-seeklogo.com.png",
+   "adobe-creative-cloud-logo.svg",
+   "ue4.png",
+   "Maya.png",
+   "LinkedIn_logo_initials.png",
+   "87390.png",
+   "5968666.png",
+   "turnaround.jpg",
+   "arduino-logo-1.png",
+   "IMG_2056.jpg",
+   "Laurels.png",
+   "ResumeScreenshot.jpg",
+   "327d6c3f-43d0-488e-8fd5-16a08216e88e.png",
+   "microsoft_office_files_icon.png",
+   "Artboard%201.png",
+   "6299f743b04c5ae587c4119d.png",
+   "img_0.jpg",
+   "unnamed.png",
+   "quixel_logo.png",
+   "SitIcon.png",
+   "artstation.png",
+   "webclip.png"
+  ]
+ },
+ "/arvr/diffuse-ar": {
+  "file": "arvr__diffuse-ar.html",
+  "title": "Diffuse AR",
+  "assets": [
+   "Screenshot%202022-03-31%20185142.jpg",
+   "Screenshot%202022-03-31%20185151.jpg",
+   "Artboard%206.png",
+   "Artboard%205.png",
+   "diffuse.png",
+   "Screenshot%202022-03-31%20205446.jpg",
+   "Screenshot%202022-04-02%20153745.jpg",
+   "letra-x-png-2-1-Transparent-Images.png",
+   "Laurels.png",
+   "DiffuseAward.png",
+   "SitIcon.png",
+   "webclip.png"
+  ]
+ },
+ "/arvr/luminence": {
+  "file": "arvr__luminence.html",
+  "title": "Luminence",
+  "assets": [
+   "letra-x-png-2-1-Transparent-Images.png",
+   "pxl_20211013_202044835.mp.jpg",
+   "20211103_161643.jpg",
+   "SitIcon.png",
+   "webclip.png"
+  ]
+ },
+ "/arvr/masq": {
+  "file": "arvr__masq.html",
+  "title": "Masq",
+  "assets": [
+   "Masq.png",
+   "unnamed.png",
+   "Screenshot%202022-04-05%20153058.jpg",
+   "letra-x-png-2-1-Transparent-Images.png",
+   "SitIcon.png",
+   "webclip.png"
+  ]
+ },
+ "/arvr/sleep-paralysis": {
+  "file": "arvr__sleep-paralysis.html",
+  "title": "Sleep Paralysis",
+  "assets": [
+   "cardbard.png",
+   "Screenshot%202022-04-06%20064739.jpg",
+   "letra-x-png-2-1-Transparent-Images.png",
+   "Screenshot%202022-04-08%20141508.jpg",
+   "Gear-360_Key-3.png",
+   "SitIcon.png",
+   "webclip.png"
+  ]
+ },
+ "/arvr/stroke-of-magic": {
+  "file": "arvr__stroke-of-magic.html",
+  "title": "Stroke of Magic",
+  "assets": [
+   "TitleLogoPlaceholder.PNG",
+   "letra-x-png-2-1-Transparent-Images.png",
+   "Screenshot%202022-04-08%20223643.jpg",
+   "Laurels.png",
+   "SOMAward.png",
+   "Screen%20Shot%202022-06-22%20at%209.37.42%20PM.png",
+   "SitIcon.png",
+   "webclip.png"
+  ]
+ },
+ "/arvr/synesthesia": {
+  "file": "arvr__synesthesia.html",
+  "title": "Synesthesia",
+  "assets": [
+   "Screenshot%202022-04-02%20201808.jpg",
+   "cardbard.png",
+   "letra-x-png-2-1-Transparent-Images.png",
+   "SitIcon.png",
+   "webclip.png"
+  ]
+ },
+ "/arvr/tridentia": {
+  "file": "arvr__tridentia.html",
+  "title": "Tridentia",
+  "assets": [
+   "TritendiaLogo.png",
+   "Screenshot%202022-04-06%20072058.jpg",
+   "letra-x-png-2-1-Transparent-Images.png",
+   "Laurels.png",
+   "TridentiaBos.png",
+   "TridentiaAward.png",
+   "SitIcon.png",
+   "webclip.png"
+  ]
+ },
+ "/other/digital-character": {
+  "file": "other__digital-character.html",
+  "title": "Digital Character",
+  "assets": [
+   "letra-x-png-2-1-Transparent-Images.png",
+   "turnaround.jpg",
+   "SAV_2021_ARVR_DanteCameron_02.png",
+   "Color.jpg",
+   "SAV_2021_ARVR_DanteCameron_03-poster-00001.jpg",
+   "SAV_2021_ARVR_DanteCameron_03-transcode.mp4",
+   "SAV_2021_ARVR_DanteCameron_03-transcode.webm",
+   "SAV_2021_ARVR_DanteCameron_01.png",
+   "dante-cameron-dantecameron-dcamer20-midterm.jpg",
+   "SitIcon.png",
+   "webclip.png"
+  ]
+ },
+ "/other/magic-lantern": {
+  "file": "other__magic-lantern.html",
+  "title": "Magic Lantern",
+  "assets": [
+   "letra-x-png-2-1-Transparent-Images.png",
+   "Screenshot%202022-04-10%20141347.jpg",
+   "Screenshot%202022-04-10%20141939.jpg",
+   "SitIcon.png",
+   "webclip.png"
+  ]
+ },
+ "/other/ruka": {
+  "file": "other__ruka.html",
+  "title": "Ruka",
+  "assets": [
+   "letra-x-png-2-1-Transparent-Images.png",
+   "unnamed.jpg",
+   "Screenshot%202022-04-09%20053100.jpg",
+   "Screenshot%202022-04-09%20055226.jpg",
+   "Screenshot%202022-04-09%20220734.jpg",
+   "unknown.png",
+   "SitIcon.png",
+   "webclip.png"
+  ]
+ },
+ "/other/wakey-wakey": {
+  "file": "other__wakey-wakey.html",
+  "title": "Wakey Wakey",
+  "assets": [
+   "letra-x-png-2-1-Transparent-Images.png",
+   "Screenshot%202022-04-10%20051709.jpg",
+   "Screenshot%202022-04-10%20052051.jpg",
+   "Screenshot%202022-04-10%20052136.jpg",
+   "SitIcon.png",
+   "webclip.png"
+  ]
+ }
+}

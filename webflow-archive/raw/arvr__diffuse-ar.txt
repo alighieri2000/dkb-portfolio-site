@@ -1,0 +1,38 @@
+Diffuse AR
+Description
+Diffuse: AR is a physical computing project created at SCAD. The purpose of this project is to create a custom, physical controller that could be used as an interface for a VR game or experience.
+The cube-shaped controller, whose buttons correspond to a bomb-defusal device within a real-time VR world, was created with Arduino. With the use of this device and quick wit, the player must dynamically turn and feel the controller in order to defuse the bomb and win the game!
+SCAD Entelechy 2022
+Best Creative Technology - First Place
+At SCAD's Entelechy awards, the annual ceremony celebrating the
+accomplishments of the school of Digital Media,
+Diffuse AR was chosen to win Best Creative Technology
+RACE AGAINST TIME
+The clock is ticking! Press the correct color on the box to defuse the bomb in time!
+This virtual experience was created with Unreal Engine 4.27. The plugin, UE4Duino, was implemented in order to communicate with present Arduino components. The gameplay loop is coded using blueprints to communicate various controller inputs.
+PHYSICAL INTERFACE
+The physical controller was designed with wooden, laser cut components.
+.25" MDF was used in order to create a sturdy container for the buttons and gyroscope components.
+The connections present are created with an Arduino Uno, an MPU6050 Gyroscope, and several pushbuttons. All elements are soldered to a protoboard which is secured to the back of the box.
+The USB-A cord travels out of the bottom and into the computer running the game.
+MPU6050
+gyroscope
+Arduino
+Uno
+220 kohm
+resistors
+Momentary
+Switches
+VIRTUAL INTERFACE
+Within Unreal Engine, the controller spins in relation to the real-world box in correspondence to the Gyroscope component.
+The buttons match to that of each virtual button attached to each side of the box.
+The button and gyroscope data are coded in Arduino to interface with Unreal Engine.
+This resulted in a controllable box that followed the X axis rotation of the physical controller!
+ASSETS
+All of the assets for Diffuse AR were created in Autodesk Maya. Once imported into Unreal, each element was placed and lit the scene for the purposes of a mysterious reflex-based VR game.
+The wire-covered bomb sits on the empty table. In front of the player is a digital timer that counts down to the next explosion. Only inputting the correct color before time runs out will stop the timer! Next to this is an analog clock whos hand spins in real time, furthering the pressure to succeed
+MISTER X
+Out of the shadows comes your employer: Mister X. This shady figure guides the player through their tasks, and gives them tips on how to interface with the game
+‍
+This simple character acts as all the needed UI and tutorial for a tight, re-playable game. His oversight helps the player to know the result of each button press. His colorful commentary appears to tell you just how well you've succeeded or how badly you've failed.
+© 2023 by Dante Cameron.

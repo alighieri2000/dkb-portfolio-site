@@ -5,8 +5,10 @@ build.py: turns content/ into a static website in site/.
     python build.py --drafts   # also include projects marked draft: true
     python build.py --serve    # build, then open a local preview at http://localhost:8000
 
-Each project is a folder under content/projects/ with a project.md (a few "key: value" lines
-between --- markers, then the write-up in Markdown) plus its images. See README.md.
+content/site.json lists the sections. Each section is a folder of projects (content/projects/,
+content/techart/) and gets its own gallery page; the first section is the home page. Each project
+is a folder with a project.md (a few "key: value" lines between --- markers, then the write-up in
+Markdown) plus its images. See README.md.
 """
 import html, json, re, shutil, sys, webbrowser
 from pathlib import Path
@@ -33,7 +35,7 @@ def read_project(folder):
                 meta[k.strip()] = v.strip()
     meta["slug"] = folder.name
     meta["draft"] = meta.get("draft", "").lower() in ("true", "yes", "1")
-    meta["order"] = int(meta.get("order", 999))
+    meta["order"] = int(meta.get("order", 999) or 999)
     meta.setdefault("title", folder.name.replace("-", " ").title())
     return meta, body.strip()
 
@@ -77,6 +79,7 @@ def picture(made, ratio, rel, alt="", cls="", eager=False, sizes="100vw"):
 
 IMG_TAG = re.compile(r'<img\b[^>]*>')
 IMG_PARA = re.compile(r'<p>((?:\s*<img\b[^>]*>\s*)+)</p>')
+YT_LINE = re.compile(r"<p>\s*@youtube\s+([A-Za-z0-9_-]{6,})\s*</p>")
 
 
 def attr(tag, name):
@@ -86,6 +89,8 @@ def attr(tag, name):
 
 def render_body(md_text, folder, out_dir):
     rendered = markdown.markdown(md_text, extensions=["extra", "sane_lists"])
+    rendered = YT_LINE.sub(lambda m: f'<div class="video"><iframe src="https://www.youtube-nocookie.com/embed/{m.group(1)}" '
+                                     'title="Video" loading="lazy" allow="fullscreen; picture-in-picture" allowfullscreen></iframe></div>', rendered)
 
     def figure(match):
         tags = IMG_TAG.findall(match.group(1))
@@ -111,27 +116,56 @@ def render_body(md_text, folder, out_dir):
 # ----------------------------------------------------------------- pages
 def fill(template, **values):
     out = template
-    for k, v in values.items():
-        out = out.replace("{{" + k + "}}", v)
+    for _ in range(2):  # nav links carry {{root}} themselves, so substitute twice
+        for k, v in values.items():
+            out = out.replace("{{" + k + "}}", v)
     return out
 
 
 def spec_rows(meta):
     rows = []
-    for key, label in (("year", "Year"), ("client", "Client"), ("role", "Role"), ("materials", "Materials"),
-                       ("tools", "Tools"), ("timeline", "Timeline"), ("status", "Status")):
+    for key, label in (("year", "Year"), ("client", "Client"), ("developer", "Developer"), ("role", "Role"),
+                       ("platform", "Platform"), ("materials", "Materials"), ("tools", "Tools"),
+                       ("timeline", "Timeline"), ("context", "Context"), ("awards", "Awards"), ("status", "Status")):
         if meta.get(key):
             rows.append(f"<div><dt>{label}</dt><dd>{html.escape(meta[key])}</dd></div>")
     return "".join(rows)
 
 
+def load_section(sec, include_drafts):
+    projects = []
+    src = CONTENT / sec["dir"]
+    if not src.exists():
+        return projects
+    for folder in sorted(p for p in src.iterdir() if (p / "project.md").exists()):
+        meta, body = read_project(folder)
+        if meta["draft"] and not include_drafts:
+            continue
+        cover = find(folder, meta.get("cover", "cover").rsplit(".", 1)[0], IMG_EXT)
+        if not cover:
+            print(f"  skipping {sec['dir']}/{folder.name}: no cover image")
+            continue
+        projects.append((meta, body, folder, cover))
+    projects.sort(key=lambda p: (p[0]["order"], p[0]["title"].lower()))
+    return projects
+
+
 def build(include_drafts=False):
     site = json.loads((CONTENT / "site.json").read_text(encoding="utf-8"))
+    sections = site.get("sections") or [{"dir": "projects", "path": "", "title": "Work"}]
     if SITE.exists():
         for child in SITE.iterdir():  # keep _img caches, replace everything else
             if child.is_dir() and (child / "_img").exists():
                 for f in child.iterdir():
                     if f.name != "_img":
+                        shutil.rmtree(f) if f.is_dir() else f.unlink()
+            elif child.is_dir() and any((g / "_img").exists() for g in child.iterdir() if g.is_dir()):
+                for f in child.iterdir():
+                    if f.is_dir() and (f / "_img").exists():
+                        for g in f.iterdir():
+                            if g.name != "_img":
+                                shutil.rmtree(g) if g.is_dir() else g.unlink()
+                    else:
                         shutil.rmtree(f) if f.is_dir() else f.unlink()
             elif child.is_dir():
                 shutil.rmtree(child)
@@ -143,63 +177,81 @@ def build(include_drafts=False):
         shutil.copy(CONTENT / "CNAME", SITE / "CNAME")
     (SITE / ".nojekyll").write_text("")
 
-    nav = "".join(f'<a href="{html.escape(l["href"])}"{" target=_blank rel=noopener" if l["href"].startswith("http") else ""}>'
-                  f'{html.escape(l["label"])}</a>' for l in site.get("links", []))
+    def nav_for(current):
+        parts = []
+        for s in (sections if len(sections) > 1 else []):  # a lone section needs no link to itself
+            href = "{{root}}" + (s["path"] + "/" if s["path"] else "./")
+            cur = ' aria-current="page"' if s is current else ""
+            parts.append(f'<a href="{href}"{cur}>{html.escape(s["title"])}</a>')
+        for l in site.get("links", []):
+            ext = ' target="_blank" rel="noopener"' if l["href"].startswith("http") else ""
+            parts.append(f'<a href="{html.escape(l["href"])}"{ext}>{html.escape(l["label"])}</a>')
+        return "".join(parts)
+
     common = dict(site_name=html.escape(site["name"]), site_description=html.escape(site.get("description", "")),
-                  nav=nav, email=html.escape(site.get("email", "")), year=str(site.get("copyright_year", "")))
-
-    projects = []
-    for folder in sorted(p for p in (CONTENT / "projects").iterdir() if (p / "project.md").exists()):
-        meta, body = read_project(folder)
-        if meta["draft"] and not include_drafts:
-            continue
-        cover = find(folder, meta.get("cover", "cover").rsplit(".", 1)[0], IMG_EXT)
-        if not cover:
-            print(f"  skipping {folder.name}: no cover image (cover.jpg / cover.webp / cover.png)")
-            continue
-        projects.append((meta, body, folder, cover))
-    projects.sort(key=lambda p: (p[0]["order"], p[0]["title"].lower()))
-
+                  email=html.escape(site.get("email", "")), year=str(site.get("copyright_year", "")))
     project_tpl = (TPL / "project.html").read_text(encoding="utf-8")
-    covers = []
-    for i, (meta, body, folder, cover) in enumerate(projects):
-        out = SITE / meta["slug"]
-        out.mkdir(exist_ok=True)
-        made, ratio = variants(cover, out / "_img", COVER_WIDTHS)
-        motion = find(folder, "hover", MOTION_EXT.keys())
-        motion_html = ""
-        if motion:
-            shutil.copy(motion, out / motion.name)
-            if MOTION_EXT[motion.suffix.lower()] == "video":
-                motion_html = f'<video class="motion" muted loop playsinline preload="none" data-src="{meta["slug"]}/{motion.name}"></video>'
-            else:
-                motion_html = f'<img class="motion" data-src="{meta["slug"]}/{motion.name}" alt="">'
-        sub = html.escape(meta.get("subtitle", ""))
-        line = " · ".join(html.escape(meta[k]) for k in ("year", "materials") if meta.get(k))
-        covers.append(
-            f'<a class="cover{" has-motion" if motion else ""}" href="{meta["slug"]}/" style="--i:{i}">'
-            + picture(made, ratio, meta["slug"] + "/_img", "", "still", eager=(i == 0)) + motion_html
-            + f'<span class="label"><span class="num">{i + 1:02d}</span><span class="t"><strong>{html.escape(meta["title"])}</strong>'
-            + (f"<em>{sub}</em>" if sub else "") + f'</span><span class="meta">{line}</span></span></a>')
-
-        prev = projects[i - 1][0] if i > 0 else None
-        nxt = projects[i + 1][0] if i + 1 < len(projects) else None
-        pn = ((f'<a class="prev" href="../{prev["slug"]}/"><span>Previous</span>{html.escape(prev["title"])}</a>' if prev else "<span></span>")
-              + (f'<a class="next" href="../{nxt["slug"]}/"><span>Next</span>{html.escape(nxt["title"])}</a>' if nxt else "<span></span>"))
-        # the project page can open on a different image than the home-page cover: hero.jpg or "hero: 02.jpg"
-        hero = find(folder, meta.get("hero", "hero").rsplit(".", 1)[0], IMG_EXT) or cover
-        hero_made, hero_ratio = (made, ratio) if hero == cover else variants(hero, out / "_img", COVER_WIDTHS)
-        page = fill(project_tpl, root="../", title=html.escape(meta["title"]), subtitle=sub, spec=spec_rows(meta),
-                    hero=picture(hero_made, hero_ratio, "_img", meta["title"], "hero-img", eager=True),
-                    body=render_body(body, folder, out), prevnext=pn,
-                    draft_note='<p class="draft-note">Draft: not published yet.</p>' if meta["draft"] else "", **common)
-        (out / "index.html").write_text(page, encoding="utf-8")
-        print(f"  {meta['slug']}: ok{' (draft)' if meta['draft'] else ''}{' + hover' if motion else ''}")
-
     index_tpl = (TPL / "index.html").read_text(encoding="utf-8")
-    (SITE / "index.html").write_text(fill(index_tpl, root="", covers="\n".join(covers), **common), encoding="utf-8")
-    (SITE / "404.html").write_text(fill((TPL / "404.html").read_text(encoding="utf-8"), root="/", **common), encoding="utf-8")
-    print(f"built {len(projects)} project(s) into {SITE}")
+    total = 0
+
+    for sec in sections:
+        base = SITE / sec["path"] if sec["path"] else SITE
+        base.mkdir(parents=True, exist_ok=True)
+        depth = 1 if sec["path"] else 0
+        root_index, root_page = "../" * depth, "../" * (depth + 1)
+        projects = load_section(sec, include_drafts)
+        nav = nav_for(sec)
+        covers = []
+        for i, (meta, body, folder, cover) in enumerate(projects):
+            out = base / meta["slug"]
+            out.mkdir(exist_ok=True)
+            made, ratio = variants(cover, out / "_img", COVER_WIDTHS)
+            motion = find(folder, meta.get("hover", "hover").rsplit(".", 1)[0], MOTION_EXT.keys())
+            motion_html = ""
+            if motion:
+                shutil.copy(motion, out / motion.name)
+                if MOTION_EXT[motion.suffix.lower()] == "video":
+                    motion_html = f'<video class="motion" muted loop playsinline preload="none" data-src="{meta["slug"]}/{motion.name}"></video>'
+                else:
+                    motion_html = f'<img class="motion" data-src="{meta["slug"]}/{motion.name}" alt="">'
+            sub = html.escape(meta.get("subtitle", ""))
+            line = " · ".join(html.escape(meta[k]) for k in ("year", "materials", "platform") if meta.get(k))
+            size = "half" if meta.get("size", "").lower() in ("half", "square", "small") else "full"
+            covers.append(
+                f'<a class="cover {size}{" has-motion" if motion else ""}" href="{meta["slug"]}/" style="--i:{i}"><div class="frame">'
+                + picture(made, ratio, meta["slug"] + "/_img", "", "still", eager=(i == 0), sizes="50vw" if size == "half" else "100vw") + motion_html
+                + f'<span class="label"><span class="num">{i + 1:02d}</span><span class="t"><strong>{html.escape(meta["title"])}</strong>'
+                + (f"<em>{sub}</em>" if sub else "") + f'</span><span class="meta">{line}</span></span></div></a>')
+
+            prev = projects[i - 1][0] if i > 0 else None
+            nxt = projects[i + 1][0] if i + 1 < len(projects) else None
+            pn = ((f'<a class="prev" href="../{prev["slug"]}/"><span>Previous</span>{html.escape(prev["title"])}</a>' if prev else "<span></span>")
+                  + (f'<a class="next" href="../{nxt["slug"]}/"><span>Next</span>{html.escape(nxt["title"])}</a>' if nxt else "<span></span>"))
+            summary = markdown.markdown(meta.get("summary", "")) if meta.get("summary") else ""
+            links = ""
+            if meta.get("links"):
+                items = []
+                for pair in meta["links"].split(";"):
+                    if "|" in pair:
+                        label, url = (s.strip() for s in pair.split("|", 1))
+                        items.append(f'<li><a href="{html.escape(url)}" target="_blank" rel="noopener">{html.escape(label)}</a></li>')
+                links = f'<ul class="links">{"".join(items)}</ul>' if items else ""
+            page = fill(project_tpl, root=root_page, nav=nav, title=html.escape(meta["title"]), subtitle=sub,
+                        spec=spec_rows(meta), summary=summary, links=links, body=render_body(body, folder, out),
+                        prevnext=pn, section_title=html.escape(sec["title"]), section_href="{{root}}" + (sec["path"] + "/" if sec["path"] else ""),
+                        draft_note='<p class="draft-note">Draft: not published yet.</p>' if meta["draft"] else "", **common)
+            (out / "index.html").write_text(page, encoding="utf-8")
+            print(f"  {sec['dir']}/{meta['slug']}: ok{' (draft)' if meta['draft'] else ''}{' + hover' if motion else ''}")
+            total += 1
+
+        (base / "index.html").write_text(
+            fill(index_tpl, root=root_index, nav=nav, covers="\n".join(covers),
+                 headline=html.escape(sec.get("headline", "")), intro=html.escape(sec.get("intro", "")),
+                 where=html.escape(sec.get("where", "")), page_title=("" if not sec["path"] else html.escape(sec["title"]) + " · "), **common),
+            encoding="utf-8")
+
+    (SITE / "404.html").write_text(fill((TPL / "404.html").read_text(encoding="utf-8"), root="/", nav=nav_for(None), **common), encoding="utf-8")
+    print(f"built {total} project(s) in {len(sections)} section(s) into {SITE}")
 
 
 if __name__ == "__main__":
