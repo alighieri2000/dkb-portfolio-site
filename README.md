@@ -1,0 +1,73 @@
+# dantexcameron.com
+
+A fabrication portfolio: a page of full-screen covers, one per project, each opening a project page with large images and text between them. Built from plain files in `content/`, published free on GitHub Pages under your own domain.
+
+## How it is organized
+
+```
+content/
+  site.json                 your name, email, nav links
+  CNAME                     the domain the site is served at
+  projects/
+    remmick/
+      project.md            the write-up (see below)
+      cover.jpg             the full-screen cover on the home page (jpg, png, or webp)
+      hover.mp4             optional: plays when someone hovers the cover (mp4, webm, or gif)
+      01.jpg, 02.jpg ...    the images the write-up refers to
+build.py                    turns content/ into site/
+preview.bat                 double-click to build and open a local preview
+```
+
+## Add or edit a project
+
+1. Make a folder under `content/projects/`. The folder name becomes the page address (`remmick` becomes `dantexcameron.com/remmick/`), so use lowercase and hyphens.
+2. Drop in `cover.jpg` (at least 2400 px wide; it fills the whole screen) and your images.
+3. Write `project.md`. The top is a few labeled lines between `---` markers; everything after is the write-up:
+
+```
+---
+title: Remmick
+subtitle: Costume FX for the villain of Sinners
+year: 2025
+client: Personal build
+role: Costume FX design and fabrication
+materials: 3D-printed parts, fog effect
+tools: Maya, ZBrush, FDM printing
+order: 2
+---
+
+A paragraph of text.
+
+![A caption under the image](01.jpg)
+
+More text. Two images side by side:
+
+![](02.jpg) ![](03.jpg)
+
+## A heading
+
+- A list
+```
+
+   `order` sets the position on the home page (1 is the top). Any label you leave out is simply not shown. `draft: true` keeps a project off the published site while you work on it; previews still show it.
+
+4. Preview: double-click `preview.bat`. It builds the site and opens it in your browser. Close the window when you are done.
+5. Publish: commit and push the change (GitHub Desktop: write a summary, click Commit, click Push). GitHub rebuilds the site in about a minute. You can also edit `project.md` or upload images straight on github.com in the browser; every saved change publishes the same way.
+
+## Hover clips
+
+Put `hover.mp4` (or `.webm`, or `.gif`) next to the cover. Keep it short (5 to 10 seconds, it loops), silent, 1080p or smaller, and under about 4 MB; an MP4 is a tenth the size of the same GIF. On phones, which have no hover, the clip plays while that cover fills the screen.
+
+## Domain
+
+The domain `dantexcameron.com` is registered at GoDaddy (through July 2027) and currently points at the old Webflow site. To point it here instead:
+
+1. In GoDaddy DNS, delete the old `A` and `CNAME` records that point to Webflow, then add:
+   - `A` records for `@` to `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`
+   - a `CNAME` record for `www` to `alighieri2000.github.io`
+2. On GitHub, in the repository's Settings, Pages: set the source to "GitHub Actions", enter `dantexcameron.com` as the custom domain, wait for the DNS check, then tick "Enforce HTTPS".
+3. Cancel the Webflow site plan. The domain itself renews at GoDaddy (about $20 a year); moving it to Cloudflare Registrar later roughly halves that, but there is no hurry.
+
+## Local requirements
+
+Python 3 with `pip install -r requirements.txt` (Pillow for images, Markdown for text). GitHub builds the site on its own servers, so this is only needed for local previews.
