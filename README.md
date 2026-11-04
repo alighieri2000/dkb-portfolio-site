@@ -81,4 +81,10 @@ The domain `dantexcameron.com` is registered at GoDaddy (through July 2027) and 
 
 ## Local requirements
 
-Python 3 with `pip install -r requirements.txt` (Pillow for images, Markdown for text). GitHub builds the site on its own servers, so this is only needed for local previews.
+Python 3. The first time `studio.bat` or `preview.bat` runs on a computer it installs the two packages the build needs (Pillow for images, Markdown for text) for that Python. If that fails, for example without internet or with a locked-down Python, run this in a terminal in this folder:
+
+```
+python -m pip install -r requirements.txt
+```
+
+GitHub builds the site on its own servers, so none of this is needed for publishing, only for local previews.

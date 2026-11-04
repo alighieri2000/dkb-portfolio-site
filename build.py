@@ -13,8 +13,24 @@ Markdown) plus its images. See README.md.
 import html, json, re, shutil, sys, webbrowser
 from pathlib import Path
 
-import markdown
-from PIL import Image, ImageOps
+
+def ensure_packages():
+    """First run on a new computer: install Pillow and Markdown for this Python if they are missing."""
+    import importlib, importlib.util, subprocess
+    missing = [pkg for mod, pkg in (("PIL", "pillow>=10"), ("markdown", "markdown>=3.5")) if importlib.util.find_spec(mod) is None]
+    if not missing:
+        return
+    print("Installing " + " and ".join(p.split(">=")[0] for p in missing) + " for this Python (first run on this computer)...", flush=True)
+    r = subprocess.run([sys.executable, "-m", "pip", "install", "--quiet", "--disable-pip-version-check", *missing])
+    if r.returncode != 0:
+        sys.exit("Could not install the packages this site needs. In a terminal in this folder, run:" + chr(10) +
+                 f"    \"{sys.executable}\" -m pip install -r requirements.txt")
+    importlib.invalidate_caches()
+
+
+ensure_packages()
+import markdown  # noqa: E402
+from PIL import Image, ImageOps  # noqa: E402
 
 ROOT = Path(__file__).parent
 CONTENT, SITE, TPL = ROOT / "content", ROOT / "site", ROOT / "templates"

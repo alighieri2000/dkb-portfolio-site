@@ -292,7 +292,9 @@ class Handler(BaseHTTPRequestHandler):
         if parts == ["build"]:
             r = subprocess.run([sys.executable, str(ROOT / "build.py"), "--drafts"], capture_output=True, text=True, cwd=ROOT)
             if r.returncode != 0:
-                return self.send_html(page("Build failed", f'<h1>Build failed</h1><pre>{html.escape(r.stdout + r.stderr)}</pre><a class="btn" href="/">Back</a>'))
+                hint = ("<p>This Python is missing a package the build needs. Close the studio, run <code>python -m pip install -r requirements.txt</code> "
+                        "in a terminal in this folder, then start the studio again.</p>" if "ModuleNotFoundError" in r.stderr else "")
+                return self.send_html(page("Build failed", f'<h1>Build failed</h1>{hint}<pre>{html.escape(r.stdout + r.stderr)}</pre><a class="btn" href="/">Back</a>'))
             return self.redirect("/preview/")
         if parts == ["publish"]:
             out = []
@@ -334,6 +336,7 @@ class Handler(BaseHTTPRequestHandler):
 
 
 if __name__ == "__main__":
+    import build  # noqa: F401  (first run on a new computer: installs Pillow and Markdown for this Python)
     for d in sections():
         (CONTENT / d).mkdir(parents=True, exist_ok=True)
     print(f"Studio at http://localhost:{PORT}/  (Ctrl+C or close this window to stop)")
