@@ -6,10 +6,11 @@ client: Personal build
 role: Modeling, rigging, printing, and finishing
 materials: FDM prints, paint
 tools: Maya, ZBrush, custom pose rig, FDM printing
-cover: 01.webp
 summary: Guido Mista's Stand from JoJo's Bizarre Adventure as durable, posable convention props: modeled, rigged for posing, printed with strength in mind, and painted to match the manga.
+cover: 01.webp
 size: half
 order: 4
+draft: true
 ---
 
 Bringing Guido Mista's Stand to life for a JoJo's Bizarre Adventure cosplay. For this project, I wanted to create highly durable, dynamic props that could survive the wear and tear of a convention floor without sacrificing the iconic style of the manga and anime.

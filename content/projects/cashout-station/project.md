@@ -9,6 +9,7 @@ tools: Maya, FDM printing, hand finishing
 summary: A life-size Cashout Station from The Finals, designed to come apart into pieces one person can carry, weigh as little as possible, and cost as little as possible without reading as a lightweight prop.
 cover: 02.webp
 order: 3
+draft: true
 ---
 
 <!-- Dante: this write-up is a placeholder built from your ArtStation slides. Replace it with the real story: what it weighs, how it packs, what it cost, how long it took. -->

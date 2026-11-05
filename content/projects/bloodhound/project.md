@@ -8,6 +8,7 @@ materials: FDM prints, EVA foam, sewn garments, micro LEDs
 tools: Maya, ZBrush, FDM printing, airbrush
 summary: Bloodhound's Whistling Winter skin from Apex Legends, modeled from leaked footage before the skin shipped and built from printed parts, EVA foam, sewn garments, and micro LEDs.
 cover: 01.webp
+focus: 50% 20%
 hover: hover.gif
 order: 3
 ---

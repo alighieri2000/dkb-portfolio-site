@@ -246,7 +246,8 @@ def build(include_drafts=False):
             line = " · ".join(html.escape(meta[k]) for k in ("year", "materials", "platform") if meta.get(k))
             size = "half" if meta.get("size", "").lower() in ("half", "square", "small") else "full"
             covers.append(
-                f'<a class="cover {size}{" has-motion" if motion else ""}" href="{meta["slug"]}/" style="--i:{i}"><div class="frame">'
+                f'<a class="cover {size}{" has-motion" if motion else ""}{" is-hidden" if meta["draft"] else ""}" href="{meta["slug"]}/" style="--i:{i}"><div class="frame">'
+                + ('<span class="hidden-badge">Hidden from live site</span>' if meta["draft"] else "")
                 + picture(made, ratio, meta["slug"] + "/_img", "", "still", eager=(i == 0), sizes="50vw" if size == "half" else "100vw", pos=pos) + motion_html
                 + f'<span class="label"><span class="num">{i + 1:02d}</span><span class="t"><strong>{html.escape(meta["title"])}</strong>'
                 + (f"<em>{sub}</em>" if sub else "") + f'</span><span class="meta">{line}</span></span></div></a>')

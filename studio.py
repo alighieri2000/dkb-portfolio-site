@@ -52,7 +52,7 @@ textarea{min-height:360px;font-family:"JetBrains Mono",Consolas,monospace;font-s
 .file .acts{display:flex;gap:6px;margin-top:6px} .file .acts button{font-size:12px;padding:4px 8px}
 .note{background:#fff7d6;border:1px solid #f0dc8a;padding:10px 12px;border-radius:6px;margin:12px 0}
 pre{background:#16181b;color:#e7ecef;padding:12px;border-radius:6px;overflow:auto;font-size:12.5px}
-.ok{color:#2e8b57} .muted{color:#6b727b}
+.ok{color:#2e8b57} .muted{color:#6b727b} .warn{color:#a8620a;font-weight:600}
 .framing{display:flex;flex-wrap:wrap;gap:20px;align-items:flex-end;margin:6px 0 4px}
 .fr{display:flex;flex-direction:column;gap:6px;font-size:12px;color:#6b727b}
 .fr .box{position:relative;overflow:hidden;border-radius:4px;background:#e8eaee;cursor:grab;touch-action:none;outline:1px solid #c9ced5}
@@ -113,6 +113,32 @@ def cover_of(folder, meta):
 
 def is_draft(meta):
     return meta.get("draft", "").lower() in ("true", "yes", "1")
+
+
+def git(*args):
+    return subprocess.run(["git", *args], capture_output=True, text=True, cwd=ROOT)
+
+
+def on_live_site(d, slug):
+    """Whether the last published commit shows this project (hidden projects and new ones do not)."""
+    r = git("show", f"origin/main:content/{d}/{slug}/project.md")
+    if r.returncode != 0:
+        return False
+    parts = r.stdout.split("---", 2)
+    front = parts[1] if len(parts) == 3 else ""
+    return not re.search(r"^draft:\s*(true|yes|1)\s*$", front, re.M | re.I)
+
+
+def status_label(d, folder, meta, cov):
+    """What the visitor sees now, and what publishing would change."""
+    if not cov:
+        return '<span class="muted">No cover, so it will not show</span>'
+    live, hidden = on_live_site(d, folder.name), is_draft(meta)
+    if hidden and live:
+        return '<strong class="warn">Set to hidden, still on the live site until you publish</strong>'
+    if not hidden and not live:
+        return '<strong class="warn">Set to show, not on the live site until you publish</strong>'
+    return '<span class="muted">Hidden</span>' if hidden else '<span class="ok">Live</span>'
 
 
 FRAMING = r"""<div class="full"><label>Cover framing: drag the picture inside any frame to choose what stays in view. All frames move together.</label>
@@ -198,13 +224,13 @@ def index_page(msg=""):
         for folder, meta in projects(d):
             cov = cover_of(folder, meta)
             thumb = f'<img class="thumb" src="/files/{d}/{folder.name}/{cov}" alt="">' if cov else '<div class="thumb"></div>'
-            state = '<span class="muted">draft</span>' if is_draft(meta) else '<span class="ok">live</span>'
+            state = status_label(d, folder, meta, cov)
             rows.append(f'<tr><td>{thumb}</td><td><a href="/edit/{d}/{folder.name}"><strong>{html.escape(meta.get("title", folder.name))}</strong></a>'
                         f'<br><span class="muted">{html.escape(meta.get("subtitle", ""))}</span></td><td>{html.escape(meta.get("order", ""))}</td>'
                         f'<td>{state}</td><td>{"cover" if cov else "<strong>no cover</strong>"}</td></tr>')
         pv = "/preview/" + (sec["path"] + "/" if sec["path"] else "")
         tables.append(f'<h2>{html.escape(sec["title"])} <a class="btn" href="{pv}" target="_blank" style="font-size:13px;margin-left:8px">Preview this gallery</a></h2>'
-                      f'<table><tr><th></th><th>Project</th><th>Order</th><th>Status</th><th>Cover</th></tr>{"".join(rows) or "<tr><td colspan=5 class=muted>No projects yet.</td></tr>"}</table>')
+                      f'<table><tr><th></th><th>Project</th><th>Order</th><th>Live site</th><th>Cover</th></tr>{"".join(rows) or "<tr><td colspan=5 class=muted>No projects yet.</td></tr>"}</table>')
     sec_opts = "".join(f'<option value="{d}">{html.escape(s["title"])}</option>' for d, s in secs.items())
     body = f"""<h1>Site studio</h1>
 <div class="bar"><form method="post" action="/build"><button class="btn">Build and preview</button></form>
@@ -212,6 +238,7 @@ def index_page(msg=""):
 <form method="post" action="/publish" onsubmit="return confirm('Commit everything and push to GitHub?')">
 <input type="hidden" name="msg" value="Update site"><button class="btn primary">Publish to GitHub</button></form></div>
 {f'<div class="note">{msg}</div>' if msg else ''}
+{'<div class="note">You have changes the live site does not have yet. Press Publish to GitHub to send them; the live site updates about a minute later.</div>' if git("status", "--porcelain", "--", "content").stdout.strip() else ''}
 {''.join(tables)}
 <h2>New project</h2>
 <form method="post" action="/new" class="grid">
@@ -219,7 +246,7 @@ def index_page(msg=""):
 <div><label>Title</label><input type="text" name="title" required></div>
 <div><label>Folder name (lowercase, hyphens; becomes the web address)</label><input type="text" name="slug" pattern="[a-z0-9][a-z0-9-]*" required placeholder="emma-frost"></div>
 <div class="full" style="margin-top:12px"><button class="btn primary">Create as draft</button></div></form>
-<p class="muted" style="margin-top:28px">Lowest order number shows first in its gallery. A project stays a draft (hidden from the published site, visible in preview) until you untick Draft.</p>"""
+<p class="muted" style="margin-top:28px">Lowest order number shows first in its gallery. A hidden project stays off the live site. It still appears in Preview, dimmed with a yellow tag, so you can keep working on it.</p>"""
     return page("Projects", body)
 
 
@@ -264,7 +291,8 @@ def edit_page(d, slug, msg=""):
 <div><label>Hover clip (plays over the cover on hover)</label><select name="hover">{opts(clips, cur_hover, "none")}</select></div>
 <div><label>Size in the gallery</label><select name="size"><option value="full"{"" if meta.get("size", "").lower() in ("half", "square", "small") else " selected"}>Full width rectangle</option><option value="half"{" selected" if meta.get("size", "").lower() in ("half", "square", "small") else ""}>Half width square (two sit side by side)</option></select></div>
 <div><label>Order in the gallery (1 = first)</label><input type="number" name="order" value="{html.escape(meta.get("order", ""))}"></div>
-<div><label>Draft</label><label style="font-size:15px;color:inherit"><input type="checkbox" name="draft" {"checked" if is_draft(meta) else ""}> Hide from the published site</label></div>
+<div><label>Visibility</label><label style="font-size:15px;color:inherit"><input type="checkbox" name="draft" {"checked" if is_draft(meta) else ""}> Hide from the live site</label>
+<span class="muted" style="font-size:13px">Save, then Publish, to change the live site. Preview always shows hidden projects, tagged.</span></div>
 {framing_block(d, slug, meta, cov, cur_hover)}
 <div class="full"><label>Summary (the paragraph in the side panel)</label><input type="text" name="summary" value="{html.escape(meta.get("summary", ""))}"></div>
 <div class="full"><label>Write-up. Images go where you put ![caption](file.jpg); two on one line sit side by side; ## makes a heading; a line with @youtube VIDEOID embeds a video.</label>
@@ -393,7 +421,7 @@ class Handler(BaseHTTPRequestHandler):
                 meta["size"] = "half" if fields.get("size") == "half" else ""
                 meta["draft"] = "true" if fields.get("draft") else ""
                 write_project(folder, meta, fields.get("body", "").replace("\r\n", "\n"))
-                return self.redirect(f"/edit/{d}/{slug}?msg=Saved.")
+                return self.redirect(f"/edit/{d}/{slug}?msg=" + urllib.parse.quote("Saved here. The live site changes when you press Publish on the project list."))
             if parts[0] == "upload":
                 saved = 0
                 for fn, data in files:

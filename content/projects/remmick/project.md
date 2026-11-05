@@ -8,6 +8,7 @@ materials: 3D-printed parts, fog effect, costume construction
 tools: Maya, ZBrush, FDM printing
 summary: Costume of the villain from Sinners, combining digital modeling and 3D printing with practical effects, including a fog effect built into the costume itself.
 cover: 07.webp
+focus: 50% 48%
 hover: rem.mp4
 size: half
 order: 2
