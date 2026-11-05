@@ -2,3 +2,6 @@ site/
 __pycache__/
 Thumbs.db
 .DS_Store
+
+# original, full-size media kept locally (not published)
+source-media/

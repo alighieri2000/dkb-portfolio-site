@@ -65,6 +65,10 @@ More text. Two images side by side:
 4. Preview: double-click `preview.bat`. It builds the site and opens it in your browser. Close the window when you are done.
 5. Publish: commit and push the change (GitHub Desktop: write a summary, click Commit, click Push). GitHub rebuilds the site in about a minute. You can also edit `project.md` or upload images straight on github.com in the browser; every saved change publishes the same way.
 
+## Choosing what shows in a cover
+
+Covers are cropped to fit the gallery frames (a wide rectangle, a square, and a tall phone shape), so sometimes the crop cuts off the part you care about. In the studio, open a project: under the cover and hover-clip menus there is a **Cover framing** panel showing all three frames. Drag the picture inside any frame and the others follow. "Show hover clip" previews the clip in the same frames, and "Center" resets. Saving writes a `focus:` line to `project.md` (for example `focus: 30% 50%`); the cover and its hover clip both use it. It moves the crop; it does not zoom, so for a tighter crop, trim the image first.
+
 ## Hover clips
 
 Put `hover.mp4` (or `.webm`, or `.gif`) next to the cover. Keep it short (5 to 10 seconds, it loops), silent, 1080p or smaller, and under about 4 MB; an MP4 is a tenth the size of the same GIF. On phones, which have no hover, the clip plays while that cover fills the screen.

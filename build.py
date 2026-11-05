@@ -86,10 +86,20 @@ def variants(src, out_dir, widths):
     return made, f"{w} / {h}"
 
 
-def picture(made, ratio, rel, alt="", cls="", eager=False, sizes="100vw"):
+def focus_pos(meta):
+    """`focus: 50% 30%` in project.md picks which part of the cover stays visible when the frame
+    crops it. Returns a CSS object-position value, or "" for the default (centered)."""
+    m = re.match(r"^\s*(\d{1,3}(?:\.\d+)?)%?\s+(\d{1,3}(?:\.\d+)?)%?\s*$", meta.get("focus", ""))
+    if not m:
+        return ""
+    x, y = (max(0.0, min(100.0, float(v))) for v in m.groups())
+    return f"{x:g}% {y:g}%"
+
+
+def picture(made, ratio, rel, alt="", cls="", eager=False, sizes="100vw", pos=""):
     srcset = ", ".join(f"{rel}/{name} {w}w" for w, name in made)
     return (f'<img class="{cls}" src="{rel}/{made[-1][1]}" srcset="{srcset}" sizes="{sizes}" '
-            f'alt="{html.escape(alt)}" style="aspect-ratio:{ratio}" '
+            f'alt="{html.escape(alt)}" style="aspect-ratio:{ratio}{";object-position:" + pos if pos else ""}" '
             f'loading="{"eager" if eager else "lazy"}" decoding="async">')
 
 
@@ -224,18 +234,20 @@ def build(include_drafts=False):
             made, ratio = variants(cover, out / "_img", COVER_WIDTHS)
             motion = find(folder, meta.get("hover", "hover").rsplit(".", 1)[0], MOTION_EXT.keys())
             motion_html = ""
+            pos = focus_pos(meta)
+            pos_style = f' style="object-position:{pos}"' if pos else ""
             if motion:
                 shutil.copy(motion, out / motion.name)
                 if MOTION_EXT[motion.suffix.lower()] == "video":
-                    motion_html = f'<video class="motion" muted loop playsinline preload="none" data-src="{meta["slug"]}/{motion.name}"></video>'
+                    motion_html = f'<video class="motion" muted loop playsinline preload="none"{pos_style} data-src="{meta["slug"]}/{motion.name}"></video>'
                 else:
-                    motion_html = f'<img class="motion" data-src="{meta["slug"]}/{motion.name}" alt="">'
+                    motion_html = f'<img class="motion"{pos_style} data-src="{meta["slug"]}/{motion.name}" alt="">'
             sub = html.escape(meta.get("subtitle", ""))
             line = " · ".join(html.escape(meta[k]) for k in ("year", "materials", "platform") if meta.get(k))
             size = "half" if meta.get("size", "").lower() in ("half", "square", "small") else "full"
             covers.append(
                 f'<a class="cover {size}{" has-motion" if motion else ""}" href="{meta["slug"]}/" style="--i:{i}"><div class="frame">'
-                + picture(made, ratio, meta["slug"] + "/_img", "", "still", eager=(i == 0), sizes="50vw" if size == "half" else "100vw") + motion_html
+                + picture(made, ratio, meta["slug"] + "/_img", "", "still", eager=(i == 0), sizes="50vw" if size == "half" else "100vw", pos=pos) + motion_html
                 + f'<span class="label"><span class="num">{i + 1:02d}</span><span class="t"><strong>{html.escape(meta["title"])}</strong>'
                 + (f"<em>{sub}</em>" if sub else "") + f'</span><span class="meta">{line}</span></span></div></a>')
 

@@ -53,6 +53,11 @@ textarea{min-height:360px;font-family:"JetBrains Mono",Consolas,monospace;font-s
 .note{background:#fff7d6;border:1px solid #f0dc8a;padding:10px 12px;border-radius:6px;margin:12px 0}
 pre{background:#16181b;color:#e7ecef;padding:12px;border-radius:6px;overflow:auto;font-size:12.5px}
 .ok{color:#2e8b57} .muted{color:#6b727b}
+.framing{display:flex;flex-wrap:wrap;gap:20px;align-items:flex-end;margin:6px 0 4px}
+.fr{display:flex;flex-direction:column;gap:6px;font-size:12px;color:#6b727b}
+.fr .box{position:relative;overflow:hidden;border-radius:4px;background:#e8eaee;cursor:grab;touch-action:none;outline:1px solid #c9ced5}
+.fr .box img,.fr .box video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;user-select:none;pointer-events:none;max-width:none}
+.fr.w2 .box{width:440px;max-width:100%;aspect-ratio:2/1} .fr.w1 .box{width:210px;aspect-ratio:1/1} .fr.w45 .box{width:168px;aspect-ratio:4/5}
 @media (max-width:760px){.grid{grid-template-columns:1fr}}
 """
 
@@ -75,7 +80,7 @@ def read_project(folder):
 
 def write_project(folder, meta, body):
     order = ["title", "subtitle", "year", "client", "developer", "role", "platform", "materials", "tools", "timeline",
-             "context", "awards", "summary", "links", "cover", "hero", "hover", "size", "order", "draft"]
+             "context", "awards", "summary", "links", "cover", "focus", "hero", "hover", "size", "order", "draft"]
     keys = [k for k in order if meta.get(k)] + [k for k in meta if k not in order and meta.get(k)]
     fm = "\n".join(f"{k}: {meta[k]}" for k in keys)
     (folder / "project.md").write_text(f"---\n{fm}\n---\n\n{body.strip()}\n", encoding="utf-8")
@@ -108,6 +113,73 @@ def cover_of(folder, meta):
 
 def is_draft(meta):
     return meta.get("draft", "").lower() in ("true", "yes", "1")
+
+
+FRAMING = r"""<div class="full"><label>Cover framing: drag the picture inside any frame to choose what stays in view. All frames move together.</label>
+<div class="bar" style="margin:6px 0 10px"><button type="button" class="btn" id="fz-img">Show cover</button>
+<button type="button" class="btn" id="fz-vid">Show hover clip</button><button type="button" class="btn" id="fz-reset">Center</button>
+<span class="muted" id="fz-read"></span></div>
+<div class="framing" id="framing">
+<div class="fr w2"><div class="box"></div><span>Full-width cover, desktop (2:1)</span></div>
+<div class="fr w1"><div class="box"></div><span>Half-width cover (square)</span></div>
+<div class="fr w45"><div class="box"></div><span>Full-width cover, phone (4:5)</span></div></div>
+<input type="hidden" name="focus" id="focus" value="__FOCUS__"></div>
+<script>
+(function(){
+  var base='/files/__DIR__/__SLUG__/', cover=__COVER__, clip=__CLIP__, mode='img';
+  var focus=__FOCUSARR__, boxes=[].slice.call(document.querySelectorAll('#framing .box'));
+  var read=document.getElementById('fz-read'), hid=document.getElementById('focus');
+  function clamp(v){return Math.max(0,Math.min(100,v));}
+  function apply(){
+    boxes.forEach(function(b){var m=b.firstChild;if(m)m.style.objectPosition=focus[0]+'% '+focus[1]+'%';});
+    hid.value=Math.round(focus[0])+'% '+Math.round(focus[1])+'%';
+    read.textContent=(Math.round(focus[0])===50&&Math.round(focus[1])===50)?'Centered (default)':'Focus '+hid.value;
+  }
+  function build(){
+    boxes.forEach(function(b){
+      b.innerHTML='';var el=null;
+      if(mode==='vid'&&clip){
+        if(/\.gif$/i.test(clip)){el=document.createElement('img');}
+        else{el=document.createElement('video');el.muted=true;el.loop=true;el.autoplay=true;el.playsInline=true;}
+        el.src=base+clip;
+      }else if(cover){el=document.createElement('img');el.src=base+cover;}
+      if(el){el.draggable=false;b.appendChild(el);}
+    });
+    apply();
+  }
+  function natural(m){return m.tagName==='VIDEO'?[m.videoWidth,m.videoHeight]:[m.naturalWidth,m.naturalHeight];}
+  boxes.forEach(function(b){
+    b.addEventListener('pointerdown',function(e){
+      var m=b.firstChild;if(!m)return;var n=natural(m);if(!n[0])return;
+      var fw=b.clientWidth,fh=b.clientHeight,sc=Math.max(fw/n[0],fh/n[1]);
+      var ox=n[0]*sc-fw,oy=n[1]*sc-fh,sx=e.clientX,sy=e.clientY,p0=[focus[0],focus[1]];
+      b.setPointerCapture(e.pointerId);b.style.cursor='grabbing';
+      function mv(ev){
+        if(ox>1)focus[0]=clamp(p0[0]-(ev.clientX-sx)/ox*100);
+        if(oy>1)focus[1]=clamp(p0[1]-(ev.clientY-sy)/oy*100);
+        apply();
+      }
+      function up(){b.removeEventListener('pointermove',mv);b.removeEventListener('pointerup',up);b.style.cursor='grab';}
+      b.addEventListener('pointermove',mv);b.addEventListener('pointerup',up);
+    });
+  });
+  document.getElementById('fz-img').onclick=function(){mode='img';build();};
+  document.getElementById('fz-vid').onclick=function(){if(!clip){read.textContent='Choose a hover clip first.';return;}mode='vid';build();};
+  document.getElementById('fz-reset').onclick=function(){focus=[50,50];apply();};
+  var cs=document.querySelector('select[name=cover]'),hs=document.querySelector('select[name=hover]');
+  if(cs)cs.addEventListener('change',function(){cover=cs.value;build();});
+  if(hs)hs.addEventListener('change',function(){clip=hs.value;if(mode==='vid')build();});
+  build();
+})();
+</script>"""
+
+
+def framing_block(d, slug, meta, cov, cur_hover):
+    m = re.match(r"^\s*(\d{1,3}(?:\.\d+)?)%?\s+(\d{1,3}(?:\.\d+)?)%?\s*$", meta.get("focus", ""))
+    fx, fy = (min(float(v), 100.0) for v in m.groups()) if m else (50.0, 50.0)
+    return (FRAMING.replace("__FOCUS__", f"{fx:g}% {fy:g}%").replace("__DIR__", d).replace("__SLUG__", slug)
+            .replace("__COVER__", json.dumps(cov or "")).replace("__CLIP__", json.dumps(cur_hover or ""))
+            .replace("__FOCUSARR__", f"[{fx:g},{fy:g}]"))
 
 
 # ----------------------------------------------------------------- pages
@@ -193,6 +265,7 @@ def edit_page(d, slug, msg=""):
 <div><label>Size in the gallery</label><select name="size"><option value="full"{"" if meta.get("size", "").lower() in ("half", "square", "small") else " selected"}>Full width rectangle</option><option value="half"{" selected" if meta.get("size", "").lower() in ("half", "square", "small") else ""}>Half width square (two sit side by side)</option></select></div>
 <div><label>Order in the gallery (1 = first)</label><input type="number" name="order" value="{html.escape(meta.get("order", ""))}"></div>
 <div><label>Draft</label><label style="font-size:15px;color:inherit"><input type="checkbox" name="draft" {"checked" if is_draft(meta) else ""}> Hide from the published site</label></div>
+{framing_block(d, slug, meta, cov, cur_hover)}
 <div class="full"><label>Summary (the paragraph in the side panel)</label><input type="text" name="summary" value="{html.escape(meta.get("summary", ""))}"></div>
 <div class="full"><label>Write-up. Images go where you put ![caption](file.jpg); two on one line sit side by side; ## makes a heading; a line with @youtube VIDEOID embeds a video.</label>
 <textarea name="body" id="body">{html.escape(body)}</textarea></div>
@@ -314,6 +387,8 @@ class Handler(BaseHTTPRequestHandler):
                 meta["summary"] = fields.get("summary", "").strip()
                 meta["cover"] = Path(fields.get("cover", "")).name
                 meta["hover"] = Path(fields.get("hover", "")).name
+                fm = re.match(r"^\s*(\d{1,3})%?\s+(\d{1,3})%?\s*$", fields.get("focus", ""))
+                meta["focus"] = f"{min(int(fm.group(1)), 100)}% {min(int(fm.group(2)), 100)}%" if fm and (fm.group(1), fm.group(2)) != ("50", "50") else ""
                 meta["order"] = fields.get("order", "").strip()
                 meta["size"] = "half" if fields.get("size") == "half" else ""
                 meta["draft"] = "true" if fields.get("draft") else ""
