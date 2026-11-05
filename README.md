@@ -79,6 +79,10 @@ The domain `dantexcameron.com` is registered at GoDaddy (through July 2027) and 
 2. On GitHub, in the repository's Settings, Pages: set the source to "GitHub Actions", enter `dantexcameron.com` as the custom domain, wait for the DNS check, then tick "Enforce HTTPS".
 3. Cancel the Webflow site plan. The domain itself renews at GoDaddy (about $20 a year); moving it to Cloudflare Registrar later roughly halves that, but there is no hurry.
 
+## Continuing with an AI assistant
+
+The `ai/` folder is a handoff for any AI assistant: who the site is for, how it works, what each project still needs, what was decided and why, and a dated log. Start a new session by having the assistant read `ai/HANDOFF.md`, `ai/STYLE_AND_FEEDBACK.md` and `ai/SITE_INTERNALS.md`, and end each session by updating `ai/SESSION_LOG.md`. The repository is public, so nothing private goes in there.
+
 ## Local requirements
 
 Python 3. The first time `studio.bat` or `preview.bat` runs on a computer it installs the two packages the build needs (Pillow for images, Markdown for text) for that Python. If that fails, for example without internet or with a locked-down Python, run this in a terminal in this folder:
