@@ -1,6 +1,6 @@
 {
   "name": "Dante Cameron",
-  "description": "Fabrication portfolio of Dante Cameron, New York: props, costumes, and installations from digital model to finished object.",
+  "description": "New York local artist and fabricator: props, costumes, and installations from digital model to finished object.",
   "email": "dantexcameron@gmail.com",
   "copyright_year": "2026",
   "sections": [
@@ -9,8 +9,8 @@
       "path": "",
       "title": "Fabrication",
       "headline": "Props, costumes, and installations, from digital model to finished object.",
-      "intro": "I design in Maya and ZBrush and build in the shop: 3D printing, vacuum forming, molding, foam, paint, and the electronics that make a piece move or glow.",
-      "where": "New York · Available for fabrication work"
+      "intro": "New York local 3D artist and fabricator with a decade of experience. Expert 3D printing, mold making, and anything else a project needs to go from concept to reality.",
+      "where": "Send a message via email for inquiries and quotes."
     }
   ],
   "links": [
@@ -20,7 +20,7 @@
     },
     {
       "label": "Email",
-      "href": "#contact"
+      "href": "mailto:dantexcameron@gmail.com"
     }
   ],
   "parked_sections": [

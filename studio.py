@@ -52,6 +52,7 @@ textarea{min-height:360px;font-family:"JetBrains Mono",Consolas,monospace;font-s
 .file .acts{display:flex;gap:6px;margin-top:6px} .file .acts button{font-size:12px;padding:4px 8px}
 .note{background:#fff7d6;border:1px solid #f0dc8a;padding:10px 12px;border-radius:6px;margin:12px 0}
 pre{background:#16181b;color:#e7ecef;padding:12px;border-radius:6px;overflow:auto;font-size:12.5px}
+textarea.short{min-height:84px;font:inherit}
 .ok{color:#2e8b57} .muted{color:#6b727b} .warn{color:#a8620a;font-weight:600}
 .framing{display:flex;flex-wrap:wrap;gap:20px;align-items:flex-end;margin:6px 0 4px}
 .fr{display:flex;flex-direction:column;gap:6px;font-size:12px;color:#6b727b}
@@ -235,6 +236,7 @@ def index_page(msg=""):
     body = f"""<h1>Site studio</h1>
 <div class="bar"><form method="post" action="/build"><button class="btn">Build and preview</button></form>
 <a class="btn" href="/preview/" target="_blank">Open preview</a>
+<a class="btn" href="/site">Edit header and site text</a>
 <form method="post" action="/publish" onsubmit="return confirm('Commit everything and push to GitHub?')">
 <input type="hidden" name="msg" value="Update site"><button class="btn primary">Publish to GitHub</button></form></div>
 {f'<div class="note">{msg}</div>' if msg else ''}
@@ -312,6 +314,94 @@ function del(n){{if(confirm('Delete '+n+' from this project folder?')){{document
     return page(meta.get("title", slug), body_html)
 
 
+# ----------------------------------------------------------------- site text
+LINK_OK = re.compile(r"^(https?://|mailto:|#|/)", re.I)
+
+
+def normalize_link(href):
+    """Accept what people naturally type: a bare email becomes mailto:, a bare domain becomes https://."""
+    if re.fullmatch(r"[^@\s/:]+@[^@\s/:]+\.[^@\s/:]+", href):
+        return "mailto:" + href
+    if re.match(r"^[a-z0-9-]+(\.[a-z0-9-]+)*\.[a-z]{2,}(/\S*)?$", href, re.I):
+        return "https://" + href
+    return href
+
+
+def read_site():
+    return json.loads((CONTENT / "site.json").read_text(encoding="utf-8"))
+
+
+def links_text(site):
+    return "\n".join(f'{l["label"]} | {l["href"]}' for l in site.get("links", []))
+
+
+def one_line(value):
+    return " ".join(value.split())
+
+
+def apply_site_fields(site, fields):
+    """Copy the form into site.json's structure. Anything the form doesn't cover (such as parked
+    sections) is left alone. Returns the link lines that could not be understood."""
+    name = one_line(fields.get("name", ""))
+    if name:
+        site["name"] = name
+    site["description"] = one_line(fields.get("description", ""))
+    site["email"] = one_line(fields.get("email", ""))
+    secs = site.get("sections") or []
+    for i, sec in enumerate(secs):
+        for k in ("headline", "intro", "where"):
+            sec[k] = one_line(fields.get(f"sec{i}_{k}", ""))
+        title = one_line(fields.get(f"sec{i}_title", ""))
+        if len(secs) > 1 and title:
+            sec["title"] = title
+    links, bad = [], []
+    for line in fields.get("links", "").splitlines():
+        if not line.strip():
+            continue
+        label, sep, href = line.partition("|")
+        label, href = label.strip(), normalize_link(href.strip())
+        if sep and label and LINK_OK.match(href):
+            links.append({"label": label, "href": href})
+        else:
+            bad.append(line.strip())
+    if not bad:
+        site["links"] = links
+    return bad
+
+
+def site_page(msg="", site=None, links=None):
+    site = site or read_site()
+    links = links_text(site) if links is None else links
+    esc = lambda v: html.escape(v or "")
+    secs = site.get("sections") or []
+    blocks = []
+    for i, sec in enumerate(secs):
+        heading = f'<h2>{esc(sec.get("title"))} page</h2>' if len(secs) > 1 else "<h2>Home page introduction</h2>"
+        title = (f'<div class="full"><label>Section name (in the navigation)</label><input type="text" name="sec{i}_title" value="{esc(sec.get("title"))}"></div>'
+                 if len(secs) > 1 else "")
+        blocks.append(f"""{heading}<div class="grid">{title}
+<div class="full"><label>Big headline</label><textarea class="short" name="sec{i}_headline">{esc(sec.get("headline"))}</textarea></div>
+<div class="full"><label>Paragraph under the headline</label><textarea class="short" name="sec{i}_intro">{esc(sec.get("intro"))}</textarea></div>
+<div class="full"><label>Small line below that (location, availability)</label><input type="text" name="sec{i}_where" value="{esc(sec.get("where"))}"></div>
+</div>""")
+    body = f"""<div class="bar"><a class="btn" href="/">All projects</a></div>
+<h1>Header and site text</h1>
+{f'<div class="note">{msg}</div>' if msg else ''}
+<form method="post" action="/site">
+<h2>Header and footer</h2><div class="grid">
+<div><label>Your name (top left of every page, footer, browser tab)</label><input type="text" name="name" required value="{esc(site.get("name"))}"></div>
+<div><label>Email (footer, click to copy)</label><input type="text" name="email" value="{esc(site.get("email"))}"></div>
+<div class="full"><label>Links at the top right, one per line: Label | address</label><textarea class="short" name="links">{esc(links)}</textarea>
+<span class="muted" style="font-size:13px">An address can be a web address, an email address, or #contact to jump to the footer.</span></div>
+<div class="full"><label>Description (shown in search results and link previews, not on the page)</label><textarea class="short" name="description">{esc(site.get("description"))}</textarea></div>
+</div>
+{''.join(blocks)}
+<div style="margin-top:18px"><button class="btn primary">Save</button> <button class="btn" name="then" value="preview">Save and preview</button>
+<span class="muted">The live site changes when you press Publish on the project list.</span></div>
+</form>"""
+    return page("Site text", body)
+
+
 # ----------------------------------------------------------------- server
 class Handler(BaseHTTPRequestHandler):
     def log_message(self, *a):  # quiet
@@ -346,6 +436,8 @@ class Handler(BaseHTTPRequestHandler):
         parts = [p for p in u.path.split("/") if p]
         if not parts:
             return self.send_html(index_page(msg))
+        if parts == ["site"]:
+            return self.send_html(site_page(msg))
         if parts[0] == "edit" and len(parts) == 3 and self.target(parts[1], parts[2]):
             return self.send_html(edit_page(parts[1], parts[2], msg))
         if parts[0] == "files" and len(parts) == 4 and self.target(parts[1], parts[2]):
@@ -379,9 +471,28 @@ class Handler(BaseHTTPRequestHandler):
             return fields, files
         return {k: v[0] for k, v in urllib.parse.parse_qs(raw.decode("utf-8")).items()}, []
 
+    def build_and_preview(self):
+        r = subprocess.run([sys.executable, str(ROOT / "build.py"), "--drafts"], capture_output=True, text=True, cwd=ROOT)
+        if r.returncode != 0:
+            hint = ("<p>This Python is missing a package the build needs. Close the studio, run <code>python -m pip install -r requirements.txt</code> "
+                    "in a terminal in this folder, then start the studio again.</p>" if "ModuleNotFoundError" in r.stderr else "")
+            return self.send_html(page("Build failed", f'<h1>Build failed</h1>{hint}<pre>{html.escape(r.stdout + r.stderr)}</pre><a class="btn" href="/">Back</a>'))
+        return self.redirect("/preview/")
+
     def do_POST(self):
         parts = [p for p in self.path.split("?")[0].split("/") if p]
         fields, files = self.form()
+        if parts == ["site"]:
+            site = read_site()
+            bad = apply_site_fields(site, fields)
+            if bad:
+                problem = ("Nothing was saved. Each link line needs a label, a | and an address such as https://example.com or you@example.com. "
+                           "Check: " + html.escape("; ".join(bad)))
+                return self.send_html(site_page(problem, site, fields.get("links", "")))
+            (CONTENT / "site.json").write_text(json.dumps(site, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+            if fields.get("then") == "preview":
+                return self.build_and_preview()
+            return self.redirect("/site?msg=" + urllib.parse.quote("Saved here. The live site changes when you press Publish on the project list."))
         if parts == ["new"]:
             d, slug, title = fields.get("section", ""), fields.get("slug", "").strip(), fields.get("title", "").strip()
             if d not in sections() or not SLUG.match(slug) or (CONTENT / d / slug).exists():
@@ -391,12 +502,7 @@ class Handler(BaseHTTPRequestHandler):
             write_project(CONTENT / d / slug, {"title": title or slug, "order": str(nxt), "draft": "true"}, "")
             return self.redirect(f"/edit/{d}/{slug}?msg=" + urllib.parse.quote("Created. Upload a cover and write the page."))
         if parts == ["build"]:
-            r = subprocess.run([sys.executable, str(ROOT / "build.py"), "--drafts"], capture_output=True, text=True, cwd=ROOT)
-            if r.returncode != 0:
-                hint = ("<p>This Python is missing a package the build needs. Close the studio, run <code>python -m pip install -r requirements.txt</code> "
-                        "in a terminal in this folder, then start the studio again.</p>" if "ModuleNotFoundError" in r.stderr else "")
-                return self.send_html(page("Build failed", f'<h1>Build failed</h1>{hint}<pre>{html.escape(r.stdout + r.stderr)}</pre><a class="btn" href="/">Back</a>'))
-            return self.redirect("/preview/")
+            return self.build_and_preview()
         if parts == ["publish"]:
             out = []
             for cmd in (["git", "add", "-A"], ["git", "commit", "-m", fields.get("msg", "Update site") or "Update site"], ["git", "push"]):
