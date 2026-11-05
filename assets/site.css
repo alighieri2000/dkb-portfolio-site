@@ -9,7 +9,17 @@
   --mono:"JetBrains Mono",Consolas,monospace;
   --gutter:clamp(12px,1.6vw,24px);
   --gap:clamp(8px,1vw,14px);
-  color-scheme:light;
+  color-scheme:light dark;
+}
+/* Dark mode follows the visitor's system setting. Cover labels sit on photos with their own
+   dark gradient, so they keep their light text in both themes. */
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1113; --panel:#171a1d; --fg:#ece8e1; --muted:#9aa3ab; --line:#2a3036; --soft:#1c2024;
+    --glint:linear-gradient(90deg,#ff7ad9,#ffb85c,#5fd8ff);
+  }
+  .draft-note{color:#e0b341}
+  img,video{filter:brightness(.94)}   /* photos sit a touch lower so they don't glare on a dark page */
 }
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased}

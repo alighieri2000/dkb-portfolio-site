@@ -1,5 +1,5 @@
 ---
-title: Remmick
+title: Smoking Wearable Wound Prop
 subtitle: Scratch-made wearable special effects, with bespoke-fit accessories utilizing 3D scanning, sculpting, and printing.
 year: 2025
 client: Personal build
@@ -9,6 +9,7 @@ tools: Maya, ZBrush, FDM printing
 summary: Costume of the villain from Sinners, combining digital modeling and 3D printing with practical effects, including a fog effect built into the costume itself.
 cover: 07.webp
 hover: rem.mp4
+size: half
 order: 2
 ---
 

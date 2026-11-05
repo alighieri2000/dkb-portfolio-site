@@ -1,21 +1,32 @@
 ---
-title: Emma Frost
-subtitle: A diamond-form costume built around vacuum-formed PETG gems and dichroic film
+title: Self-Illuminating Diamonds
+subtitle: Lights and dichroic film illuminate inner 3D printed facets for a magical, wearable effect
 year: 2026
-client: Personal build
 role: Design and fabrication
 materials: Vacuum-formed PETG, dichroic film, 1 mm EVA foam, stretch fabric
 tools: Home-built vacuum former, Cricut, sewing
-order: 8
-draft: true
+summary: An Emma Frost costume centered on a custom faceted diamond look: 3D printed PETG gems, dichroic-film accents, and an EVA-foam + spandex custom garment form.
+cover: FrostMain2.png
+hover: brightDiamonds.mp4
+size: half
+order: 1
 ---
 
-<!-- Dante: add cover.jpg (the finished costume worn), a macro of the diamonds, and the vacuum former in use, then delete "draft: true" above. Also fill in which Emma Frost this is and the full scope. -->
+![](1.png)
 
-An Emma Frost costume centered on a custom faceted diamond look: vacuum-formed PETG gems, dichroic-film accents, and an EVA-foam garment form.
+![](3.png)
 
-## What I made
 
-- Built my own vacuum former and used it to produce lightweight, subtly faceted PETG diamonds, dialing in surface finish and repeatability.
-- Cut dichroic film into geometric shapes on a Cricut for shifting, iridescent accents.
-- Constructed the garment form from 1 mm EVA foam panels and covered it with stretch fabric.
+![](4.png)
+
+![](5.png)
+
+![](6.png)
+
+![](7.png)
+
+![](8.png)
+
+![](FrostMain2.png)
+
+![](8-1.png)
