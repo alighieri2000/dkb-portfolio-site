@@ -41,6 +41,7 @@ Keys the build uses:
 | `cover` | file name of the cover image (default `cover.*`); extension is ignored, any of jpg/jpeg/png/webp is found |
 | `hover` | file name of the hover clip (default `hover.*`); mp4 or webm become `<video>`, gif becomes `<img>` |
 | `size` | `half`, `square` or `small` make a 1:1 half-width tile; anything else is full |
+| `focus` | `50% 30%`: which part of the cover (and its hover clip) stays in view when a frame crops it; written by the studio's Cover framing panel, applied as `object-position` |
 | `order` | sort key in the gallery, lowest first, ties broken by lowercase title; default 999 |
 | `draft` | `true`, `yes` or `1` hides the project unless built with `--drafts` |
 
@@ -49,7 +50,8 @@ Keys the build uses:
 Body rules (`render_body`):
 
 - Markdown with the `extra` and `sane_lists` extensions.
-- A paragraph that is only images becomes `<figure>` elements; the alt text becomes the caption. Several images in one paragraph become `<div class="row" style="--n:N">` and sit side by side.
+- A paragraph that is only images becomes `<figure>` elements; the alt text becomes the caption. Several images in one paragraph become `<div class="row" style="--n:N">` and sit side by side. Before Markdown runs, `IMG_MD` moves any `![]()` run onto its own paragraph, so an image with text on the very next line still renders.
+- `![caption](clip.mp4)` (also webm or gif) is a clip in the write-up: the file is copied unchanged into `_img/`; mp4 and webm become `<video class="clip" muted loop playsinline controls preload="metadata">` (mp4 also gets `style="aspect-ratio:W / H"` from `mp4_size()`, a tiny MP4 box reader), gif becomes `<img class="clip">`. `site.js` plays and pauses these by visibility.
 - A paragraph that is exactly `@youtube VIDEOID` becomes a `youtube-nocookie.com` iframe inside `<div class="video">`.
 - Image paths are relative to the project folder; missing files print a warning and are dropped.
 - HTML comments pass through Markdown and do not render, which is how placeholder notes to Dante are left in the files.
@@ -76,14 +78,20 @@ Tokens on `:root`: `--bg` (#f3f4f6), `--glint` (pink, orange, cyan gradient used
 
 - `.top`: header with `.brand` and `nav`. `.intro-home`: headline, intro, `.where`.
 - `.covers`: a two-column grid with `--gap`. `.cover.full` spans both columns with a 2:1 frame; `.cover.half` is one column with a 1:1 frame. `.frame` clips the image; `.still` and `.motion` are stacked, `.motion` fades in while `.cover.playing`. `.frame::after` draws the glint line. `.label` is absolutely positioned bottom-left with a gradient scrim; half tiles use smaller label type.
-- `.sheet-layout`: project page grid, `.gallery` left and `.side` right (sticky). `.spec` is a `<dl>` of rows; `.summary`; `.links` buttons; `.draft-note`. `.gallery .row` lays figures side by side using `--n`. `.gallery .video` is a 16:9 box.
+- `.sheet-layout`: project page grid, `.gallery` left and `.side` right (sticky). `.spec` is a `<dl>` of rows; `.summary`; `.links` buttons; `.draft-note`. `.gallery .row` lays figures side by side using `--n`. `.gallery .video` is a 16:9 box for YouTube embeds; `.gallery figure video.clip` styles write-up clips like images.
+- A `prefers-color-scheme: dark` block (added 2026-11-05 by another session) redefines the colour tokens, so the site is dark on phones and desktops set to dark mode; photos get a slight brightness reduction there.
 - `.pn` previous and next; `.foot` footer with the copyable email.
 - Breakpoints at 900 px (side panel moves under the gallery), 700 px and 640 px (single-column covers, smaller type). `prefers-reduced-motion` disables the clip fade and autoplay.
 
 ## assets/site.js
 
-- Hover clips: for each `.cover.has-motion`, on devices that can hover, `pointerenter` and focus load the clip (moving `data-src` to `src`) and play it; leave and blur stop it. On touch devices an IntersectionObserver plays whichever cover is at least 60 percent visible. Reduced-motion users get stills only.
+- Hover clips: for each `.cover.has-motion`, on devices that can hover, `pointerenter` and focus load the clip (moving `data-src` to `src`) and play it; leave and blur stop it. On touch devices one IntersectionObserver with `rootMargin: 100%` starts loading a clip (`preload="auto"`) while it is still a screen away, and a second plays whichever cover is at least 60 percent visible and pauses it when it leaves. The `.playing` class (which fades the clip in over the still) is added for videos only on the `playing` event and removed on `waiting` and `pause`, so a slow or refused video never hides the still. A `play()` that rejects (iPhone Low Power Mode, Auto-Play Video Previews off, data savers) is queued and retried on the first `touchend`, `pointerup` or `keydown`. Reduced-motion users get stills only.
+- Write-up clips (`.gallery video.clip`): muted and inline, played at 50 percent visibility and paused when scrolled out. A pause the script did not cause marks the clip `data-manual`, and it is left alone from then on.
 - Email: elements with `.email` and `data-email` copy the address on click and show "Copied" for a moment.
+
+## Clip encoding for phones
+
+What played on desktop but not on phones (2026-11-10) was a 14.5 MB H.264 file with an audio track and a 2.7 MB High-profile level 5.0 file. Phones need small, plain files: H.264 High profile at level 4.0 or lower, `yuv420p`, no audio, 1280 px wide or less, a 2 Mbps cap, `+faststart`. The README gives the ffmpeg command. On the OneDrive computer ffmpeg is not on the PATH, but the `imageio-ffmpeg` Python package ships one: `python -c "import imageio_ffmpeg; print(imageio_ffmpeg.get_ffmpeg_exe())"`. Put the original in `source-media/<slug>/` (git-ignored) before overwriting the clip in `content/`, so `project.md` keeps pointing at the same file name. GitHub Pages supports byte-range requests, so that was not the problem.
 
 ## studio.py
 
@@ -94,7 +102,7 @@ Routes:
 | route | what |
 |---|---|
 | `GET /` | all sections, their projects (thumb, title, order, live or draft, cover present), build, preview and publish buttons, new-project form |
-| `GET /edit/<dir>/<slug>` | the editor: text fields from `FIELDS`, cover and hover selects built from the files in the folder, size select, order, draft checkbox, summary, write-up textarea with an Insert button per image, upload form, delete buttons |
+| `GET /edit/<dir>/<slug>` | the editor: text fields from `FIELDS`, cover and hover selects built from the files in the folder, size select, Cover framing panel (writes `focus:`), order, draft checkbox, summary, write-up textarea with an Insert button per image and clip, upload form, delete buttons |
 | `GET /files/<dir>/<slug>/<name>` | serves a content file for thumbnails |
 | `GET /preview/...` | serves `site/` |
 | `POST /new` | creates `content/<dir>/<slug>/project.md` as a draft with the next order number; slug must match `^[a-z0-9][a-z0-9-]{0,60}$` |

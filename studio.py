@@ -278,7 +278,7 @@ def edit_page(d, slug, msg=""):
         else:
             media = (f'<video src="/files/{d}/{slug}/{p.name}" muted loop playsinline onmouseover="this.play()" onmouseout="this.pause()"></video>'
                      if p.suffix.lower() != ".gif" else f'<img src="/files/{d}/{slug}/{p.name}" alt="">')
-            insert = ""
+            insert = f'<button type="button" onclick="ins(\'{p.name}\')">Insert</button>'
         tiles.append(f'<div class="file">{media}<div class="name">{p.name}</div><div class="acts">{insert}'
                      f'<button type="button" class="btn danger" onclick="del(\'{p.name}\')">Delete</button></div></div>')
     pv = "/preview/" + (sec["path"] + "/" if sec["path"] else "") + slug + "/"
@@ -297,7 +297,7 @@ def edit_page(d, slug, msg=""):
 <span class="muted" style="font-size:13px">Save, then Publish, to change the live site. Preview always shows hidden projects, tagged.</span></div>
 {framing_block(d, slug, meta, cov, cur_hover)}
 <div class="full"><label>Summary (the paragraph in the side panel)</label><input type="text" name="summary" value="{html.escape(meta.get("summary", ""))}"></div>
-<div class="full"><label>Write-up. Images go where you put ![caption](file.jpg); two on one line sit side by side; ## makes a heading; a line with @youtube VIDEOID embeds a video.</label>
+<div class="full"><label>Write-up. Images and clips go where you put ![caption](file.jpg) (mp4, webm and gif work the same way); two on one line sit side by side; ## makes a heading; a line with @youtube VIDEOID embeds a video.</label>
 <textarea name="body" id="body">{html.escape(body)}</textarea></div>
 <div class="full" style="margin-top:14px"><button class="btn primary">Save</button> <span class="muted">Saving writes project.md. Build to see it.</span></div>
 </div></form>

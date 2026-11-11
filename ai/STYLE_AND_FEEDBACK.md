@@ -13,6 +13,7 @@ What Dante has asked for, in Dante's words where possible, with dates. Treat eve
 - **Personal builds are fine here.** On the resume Dante called personal cosplays "not really resume material", but this site exists to show them. Label the client line `Personal build`.
 - Subtitles are one line, descriptive, and may be a full sentence with a period (Remmick's subtitle, written by Dante: "Scratch-made wearable special effects, with bespoke-fit accessories utilizing 3D scanning, sculpting, and printing.").
 - Long description belongs in `summary:` (the side panel). Text in the write-up body sits between images, so keep it to short process notes.
+- **Titles describe the object, not the franchise** (observed 2026-11-10 from Dante's own edits, not stated as a rule): Remmick became Smoking Wearable Wound Prop, Bloodhound became Cyberpunk Deer Mask and Costume, Emma Frost became Self-Illuminating Diamonds. The source material stays in the subtitle or write-up. Follow the pattern for new projects and ask before naming one after a franchise.
 
 ## Layout and visuals
 
@@ -38,3 +39,4 @@ What Dante has asked for, in Dante's words where possible, with dates. Treat eve
 - 2026-11-04: "I dont like the new tech art page or the new margins. Put the titles and stuff back onto the pages on the main page. Make the margins smaller." Also asked for half-size squares.
 - 2026-11-04: "lets just ignore tech art for now. This is a fabrication work session... It probably is better on its own separate site anyway."
 - 2026-11-04: Dante edited two project files by hand (Cashout order 3, new Remmick subtitle). Hand edits are normal; read the file before changing it.
+- 2026-11-10: "seems the website isnt loading some of the videos. namely on mobile the emma frost and remmick videos wont play. bloodhound, the only gif, plays" and "can you make it so i can insert the videos into the pages too?" Both done the same day.

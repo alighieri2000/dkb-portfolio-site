@@ -1,5 +1,5 @@
 ---
-title: Light-Up Horned Mask
+title: Cyberpunk Deer Mask and Costume
 subtitle: A mixed-media costume build from Apex Legends, modeled from scratch in Maya and ZBrush and 3D printed, with LED eyes.
 year: 2026
 client: Personal build

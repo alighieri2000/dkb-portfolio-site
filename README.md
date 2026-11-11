@@ -58,7 +58,7 @@ More text. Two images side by side:
 
    `size: half` makes the project a square that shares a row with the next half-size project; leave it out for a full-width rectangle. `order` sets the position on the home page (1 is the top). Any label you leave out is simply not shown. `draft: true` keeps a project off the published site while you work on it; previews still show it. Other optional lines: `summary:` (the paragraph in the side panel), `links:` (`Label | https://url ; Label | https://url`, shown as buttons), `cover: 03.jpg` and `hover: clip.mp4` to use files not named cover/hover, and `timeline:`.
 
-   A line containing only `@youtube VIDEOID` embeds that YouTube video. Tech-art pages also use `developer:`, `platform:`, `context:` and `awards:` in the spec sheet.
+   A video file works like an image: `![caption](clip.mp4)` (mp4, webm or gif) puts the clip in the write-up, where it plays silently while on screen and keeps its controls for sound or scrubbing. Keep such clips small the same way as hover clips. A line containing only `@youtube VIDEOID` embeds that YouTube video. Tech-art pages also use `developer:`, `platform:`, `context:` and `awards:` in the spec sheet.
 
    On the project page the images and write-up scroll on the left while the title, spec sheet and summary stay pinned on the right. Text in the write-up appears between the images, so use it for short process notes; the longer description belongs in `summary`.
 
@@ -75,7 +75,13 @@ In the studio, press **Edit header and site text** on the project list. That pag
 
 ## Hover clips
 
-Put `hover.mp4` (or `.webm`, or `.gif`) next to the cover. Keep it short (5 to 10 seconds, it loops), silent, 1080p or smaller, and under about 4 MB; an MP4 is a tenth the size of the same GIF. On phones, which have no hover, the clip plays while that cover fills the screen.
+Put `hover.mp4` (or `.webm`, or `.gif`) next to the cover. Keep it short (5 to 10 seconds, it loops), silent, 1080p or smaller, and under about 4 MB; an MP4 is a tenth the size of the same GIF. On phones, which have no hover, the clip plays while that cover fills the screen. If a phone refuses to start videos on its own (iPhone Low Power Mode, or Auto-Play Video Previews turned off in Accessibility settings), the still stays in place and the clip starts at the first tap on the page.
+
+Phones need small, plain H.264 files: no audio track, 1280 px wide or less, and a few megabytes at most. A 15 MB clip may never get far enough to play on a cellular connection. If you have ffmpeg, this shrinks a clip to that shape:
+
+```
+ffmpeg -i big.mp4 -an -vf "scale=1280:-2" -c:v libx264 -profile:v high -level 4.0 -pix_fmt yuv420p -crf 26 -maxrate 2000k -bufsize 4000k -movflags +faststart hover.mp4
+```
 
 ## Domain
 

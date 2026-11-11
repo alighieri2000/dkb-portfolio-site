@@ -26,21 +26,23 @@ Full technical detail is in `SITE_INTERNALS.md`.
 ## Where it stands (2026-11-04)
 
 - The site builds and deploys from `github.com/alighieri2000/dkb-portfolio-site` (public; Pages needs that on a free plan).
-- **Live projects, in gallery order**: Remmick (order 2, full), Bloodhound Whistling Winter (order 3, full, has a hover GIF), Life-Size Cashout Station (order 3, full), Sex Pistols / Six Bullets (order 4, half), ARC Raiders Wasp (order 5, half). Bloodhound and Cashout both carry order 3 and sort by title; give them distinct numbers when Dante decides which comes first. The two half-size squares share the last row.
-- **Drafts waiting on photos**: Life-Sized LEGO Knight, Galactic Couture PLINKO, Emma Frost. Each has front matter and a write-up but no cover, so the build skips them; `draft: true` keeps them off the published site either way.
-- **Placeholders to replace**: the Cashout Station and Remmick write-ups were drafted from Dante's ArtStation slides and carry an HTML comment at the top saying what Dante needs to add. The Cashout and ARC Wasp covers are stills Dante wants to replace with cleaner shots.
+- **Live projects, in gallery order (2026-11-10)**: Self-Illuminating Diamonds (folder `emma-frost`, order 1, half, hover video), Smoking Wearable Wound Prop (`remmick`, order 2, half, hover video), Cyberpunk Deer Mask and Costume (`bloodhound`, order 3, full, hover GIF), ARC Raiders Wasp (`arc-wasp`, order 5, full). Between 2026-11-05 and 11-10 Dante renamed the titles away from franchise names and set Life-Size Cashout Station and Sex Pistols / Six Bullets back to drafts; the folder names did not change.
+- **Drafts**: Life-Sized LEGO Knight and Galactic Couture PLINKO still have no photos. Life-Size Cashout Station and Sex Pistols / Six Bullets have photos and covers but carry `draft: true` as of 2026-11-10 (Dante did not say why; ask before publishing them).
+- **Placeholders to replace**: the Cashout Station and Smoking Wearable Wound Prop write-ups were drafted from Dante's ArtStation slides and may still carry an HTML comment at the top saying what Dante needs to add (check `CONTENT_STATUS.md`). The ARC Wasp cover is a still Dante wanted to replace with a cleaner shot.
 - **Tech art is parked.** Eleven tech-art pages rebuilt from the old Webflow site sit in `content/techart/` with a section definition under `parked_sections` in `site.json`. They are not built. Dante said on 2026-11-04: "this is a fabrication work session... it probably is better on its own separate site anyway." Do not re-add them to this site unless Dante asks.
-- **Domain**: `dantexcameron.com` is registered at GoDaddy until 2027-07-29 and was pointed at the old Webflow site. The GoDaddy account belongs to someone else, and Dante was waiting on them to change the DNS records (the exact records are in the repo `README.md`). One check during the session saw the records already resolving to GitHub, so verify with `nslookup dantexcameron.com` before assuming either state. After DNS: set the custom domain in the repo's Pages settings and tick Enforce HTTPS. Then cancel the Webflow site plan.
+- **Domain**: `dantexcameron.com` serves the site over HTTPS as of 2026-11-10; the GoDaddy DNS (account held by someone else, registration until 2027-07-29) was switched from Webflow to GitHub Pages. The old Webflow site plan can be cancelled once Dante confirms nothing else depends on it.
 - **Two computers**: Dante's main working copy is in OneDrive at `C:\Users\dante\OneDrive\Documents\GitHub\portfolio-site`; a second computer has a clone at `D:\Github\dkb-portfolio-site`. They sync only through git, so commit and push before switching. On 2026-11-04 the second computer's Python lacked Pillow and Markdown; `build.py` now installs them itself on first run.
-- Everything is committed and pushed as of the end of 2026-11-04.
+- Dante edits through the studio on either computer and sometimes leaves edits unpublished; run `git status` before building on anything, and treat uncommitted content changes as Dante's work in progress.
+- **Hover clips on phones** (fixed 2026-11-10): the two cover videos were re-encoded small and silent, and `site.js` now buffers a clip before it scrolls into view, shows it only once frames arrive, and retries on the first tap if the phone blocks autoplay. Clips can also go inside write-ups (`![caption](clip.mp4)`).
 
-## What to do next, in Dante's priority order as of 2026-11-04
+## What to do next, in Dante's priority order as of 2026-11-10
 
-1. **Photos for the three drafts**, then remove `draft: true`. The HTML comment at the top of each `project.md` lists the shots Dante planned.
-2. **Real write-ups** for Cashout Station and Remmick: weight, how it packs, cost, time, what is printed versus sewn, how the fog rig works. Replace the placeholder paragraphs and delete the comment.
-3. **Cleaner covers** for Cashout Station and ARC Wasp.
-4. **Domain cutover** once DNS is confirmed (Pages settings, HTTPS, cancel Webflow).
-5. Later, and only when Dante raises it: a separate tech-art site from `content/techart/`, or re-enabling the section here.
+1. **Photos for LEGO Knight and Galactic PLINKO**, then remove `draft: true`. The HTML comment at the top of each `project.md` lists the shots Dante planned.
+2. **Real write-ups** for Cashout Station and the wound prop: weight, how it packs, cost, time, what is printed versus sewn, how the fog rig works. Replace the placeholder paragraphs and delete the comment.
+3. **Decide whether Cashout Station and Six Bullets go back live** (both drafts as of 2026-11-10).
+4. **Cleaner cover** for ARC Wasp, if Dante still wants one.
+5. **Cancel the Webflow plan** now that the domain points here.
+6. Later, and only when Dante raises it: a separate tech-art site from `content/techart/`, or re-enabling the section here.
 
 ## Rules that matter most (details in STYLE_AND_FEEDBACK.md)
 

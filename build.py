@@ -105,6 +105,7 @@ def picture(made, ratio, rel, alt="", cls="", eager=False, sizes="100vw", pos=""
 
 IMG_TAG = re.compile(r'<img\b[^>]*>')
 IMG_PARA = re.compile(r'<p>((?:\s*<img\b[^>]*>\s*)+)</p>')
+IMG_MD = re.compile(r'(?:!\[[^\]]*\]\([^)]+\)[ \t]*)+')
 YT_LINE = re.compile(r"<p>\s*@youtube\s+([A-Za-z0-9_-]{6,})\s*</p>")
 
 
@@ -113,7 +114,49 @@ def attr(tag, name):
     return html.unescape(m.group(1)) if m else ""
 
 
+def mp4_size(path):
+    """Width and height of the first video track in an MP4 (from its tkhd box), or None. Lets the
+    page reserve the right space for a clip before it loads."""
+    import struct
+    try:
+        buf = path.read_bytes()
+    except OSError:
+        return None
+
+    def boxes(start, end):
+        pos = start
+        while pos + 8 <= end:
+            size, typ = struct.unpack(">I4s", buf[pos:pos + 8])
+            hdr = 8
+            if size == 1:
+                size = struct.unpack(">Q", buf[pos + 8:pos + 16])[0]
+                hdr = 16
+            elif size == 0:
+                size = end - pos
+            if size < hdr:
+                return
+            yield typ, pos + hdr, pos + size
+            pos += size
+
+    for typ, body, end in boxes(0, len(buf)):
+        if typ != b"moov":
+            continue
+        for t2, b2, e2 in boxes(body, end):
+            if t2 != b"trak":
+                continue
+            for t3, b3, e3 in boxes(b2, e2):
+                if t3 == b"tkhd" and e3 - b3 >= 84:
+                    off = b3 + (88 if buf[b3] == 1 else 76)
+                    w, h = struct.unpack(">II", buf[off:off + 8])
+                    if w >> 16 and h >> 16:
+                        return w >> 16, h >> 16
+    return None
+
+
 def render_body(md_text, folder, out_dir):
+    # Images only get processed when they stand alone, so split them from any text touching them:
+    # without a blank line between, Markdown would merge the two and the picture would not load.
+    md_text = IMG_MD.sub(lambda m: "\n\n" + m.group(0).strip() + "\n\n", md_text)
     rendered = markdown.markdown(md_text, extensions=["extra", "sane_lists"])
     rendered = YT_LINE.sub(lambda m: f'<div class="video"><iframe src="https://www.youtube-nocookie.com/embed/{m.group(1)}" '
                                      'title="Video" loading="lazy" allow="fullscreen; picture-in-picture" allowfullscreen></iframe></div>', rendered)
@@ -124,14 +167,28 @@ def render_body(md_text, folder, out_dir):
         for tag in tags:
             src = attr(tag, "src")
             path = folder / src
-            if path.suffix.lower() not in IMG_EXT or not path.exists():
+            ext = path.suffix.lower()
+            if (ext not in IMG_EXT and ext not in MOTION_EXT) or not path.exists():
                 print(f"  warning: {folder.name}: image not found: {src}")
                 continue
-            made, ratio = variants(path, out_dir / "_img", BODY_WIDTHS)
             cap = attr(tag, "alt")
             sizes = "100vw" if len(tags) == 1 else f"{100 // len(tags)}vw"
-            items.append("<figure>" + picture(made, ratio, "_img", cap, sizes=sizes) +
-                         (f"<figcaption>{html.escape(cap)}</figcaption>" if cap else "") + "</figure>")
+            if ext in MOTION_EXT:
+                # A clip in the write-up: copied as is. Videos play silently while on screen (site.js)
+                # and keep their controls; gifs are left untouched since Pillow would flatten them.
+                (out_dir / "_img").mkdir(parents=True, exist_ok=True)
+                shutil.copy(path, out_dir / "_img" / path.name)
+                if MOTION_EXT[ext] == "video":
+                    dims = mp4_size(path) if ext == ".mp4" else None
+                    ar = f' style="aspect-ratio:{dims[0]} / {dims[1]}"' if dims else ""
+                    media = (f'<video class="clip" muted loop playsinline controls preload="metadata"{ar} '
+                             f'src="_img/{path.name}"></video>')
+                else:
+                    media = f'<img class="clip" src="_img/{path.name}" alt="{html.escape(cap)}" loading="lazy" decoding="async">'
+            else:
+                made, ratio = variants(path, out_dir / "_img", BODY_WIDTHS)
+                media = picture(made, ratio, "_img", cap, sizes=sizes)
+            items.append("<figure>" + media + (f"<figcaption>{html.escape(cap)}</figcaption>" if cap else "") + "</figure>")
         if not items:
             return ""
         return items[0] if len(items) == 1 else f'<div class="row" style="--n:{len(items)}">{"".join(items)}</div>'
